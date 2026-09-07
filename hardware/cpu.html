@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en-US"> 
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+	<meta name="author" content="Eric Faust" />
+    <title>Arbeitsheft: Informatik und Bildung</title>
+	
+	<link rel="stylesheet" href="css/style.css" />
+	<link rel="icon" href="media/28px_Faust.png" type="image/x-icon" />
+	<script defer src="scripts/cpuScript.js"></script>
+  </head>
+ 
+  <body>
+	<header>
+		Einführung in die Hardwaretechnik
+	</header>
+	<nav>
+		<ul class="nav">
+			<li><a href="index.html">VN-Architektur</a></li>
+			<li><a href="cpu.html">CPU</a></li>
+			<li><a href="gpu.html">GPU</a></li>
+			<li><a href="memory.html">Speicher</a></li>
+			<li><a href="bus.html">Mainboard &#38; Anschlüsse</a></li>
+			<li><a href="wrup.html">Abschluss</a></li>
+		</ul>
+	</nav>
+	<div class="subHeader">
+		Central Processing Unit
+	</div>
+	<div class="taskFive">
+		<p>
+			<b>Aufgabe 1:</b><br>
+			Unter der Aufgabenstellung findet ihr Informationen und Fragen zum Thema CPU. Eure Aufgabe ist es, die Mindmap mit wichtigen Informationen zu <b>erweitern</b>. Fangt mit einer eigenen Recherche zum Thema an und versucht, die Fragen zu beantworten. 
+			Euch ist es freigestellt, auch die Texte und Videos von dieser Webseite zu verwenden. Falls auf dem A3-Blatt nicht genügend Platz ist, könnt ihr auch ein Extrablatt verwenden. Unter den Fragen findet ihr außerdem ein Kreuzworträtsel, 
+			das ihr als Extrablatt erhaltet oder auch als digitale <a href="media/riddle_ready.pdf" target="_blank">Version</a>.
+		<p>
+			Diese <b>Leitfragen</b> können euch helfen, nach anfänglichen Informationen zu suchen. Sucht auch gerne nach anderen Informationen, die euch interessieren.
+			<ol>
+				<li>
+					Kann ein Computer ohne CPU funktionieren?
+				</li>
+				<li>
+					Welche Orientierungswerte gibt es, um die Geschwindigkeit einer CPU anzugeben?
+				</li>
+				<li>
+					Welchen Vorteil haben mehrere Kerne?
+				</li>
+				<li>
+					Was macht die ALU?
+				</li>
+				<li>
+					Was ist Simultaneous Multithreading?
+				</li>
+			</ol>
+		</p>
+		<p class="p2Header">
+			Kreuzworträtsel
+		</p>
+		<div class="imageContainer">
+			<img src="media/riddle_ready.svg" alt="Crossword" width="100%" height="100%">
+		</div>
+		<p>
+			Mit dem Aufdecken-Button könnt ihr euch die Lösung des Kreuzworträtsels anschauen.
+		</p>
+		<button id="crosswordButton" type="button">Aufdecken</button>
+		<div class="center">
+			<p id="hiddenCrossword" hidden>
+			<img src="media/riddle_solved.svg" alt="solvedCrossword" width="70%" height="70%">
+			</p>
+		</div>
+		<p class="p1Header">Was ist die zentrale Recheneinheit (CPU)?</p>
+		<p>
+			Eine zentrale Recheneinheit (CPU) ist die wichtigste Funktionskomponente eines Computers. Die CPU ist eine Ansammlung elektronischer Schaltkreise, 
+			die das Betriebssystem und die Apps eines Computers ausführen und eine Vielzahl anderer Computervorgänge verwalten.
+			Eine CPU ist im Wesentlichen das aktive Gehirn des Computers. Sie ist der unsichtbare Manager innerhalb des Computers, wo Dateneingaben in 
+			Informationsausgaben umgewandelt werden. Sie speichert Programmanweisungen und führt sie über ihre riesigen Schaltkreisnetzwerke aus.
+			Wie das menschliche Gehirn ist auch die CPU zu Multitasking in der Lage. Das bedeutet, dass sie auch der Teil des Computers ist, der gleichzeitig 
+			die internen Funktionen des Computers reguliert, den Stromverbrauch überwacht, Computerressourcen zuweist und Schnittstellen zu verschiedenen 
+			Apps, Programmen und Netzwerken bietet. Wenn ihr immer noch nicht davon überzeugt seid, wie wichtig CPUs für die Datenverarbeitung sind, 
+			solltest du Folgendes in Betracht ziehen: Die CPU ist das eine Teil, das in jedem Computer zu finden ist, unabhängig von Größe oder 
+			Verwendungszweck dieses Computers. Wenn du dies auf einem Smartphone, Laptop oder PC liest, verwendest du in diesem Moment eine CPU.
+		</p>
+		<div class="imageContainer">
+			<img src="media/cpu_top.jpg" alt="CPU Top" width="25%" height="25%">
+			<img src="media/cpu_bottom.jpg" alt="CPU Bottom" width="25%" height="25%">
+		</div>
+		<p class="p2Header">Was sind die Komponenten einer CPU?</p>
+		<p>
+			Eine CPU ist eine komplexe elektronische Schaltung, die aus mehreren Schlüsselkomponenten besteht, welche Daten verarbeiten und Anweisungen ausführen. Die Hauptkomponenten einer CPU werden als nächstes angegeben.
+		</p>
+		<p class="p2Header">Steuereinheit</p>
+		<p>
+			Die Steuereinheit verwaltet die Befehlsverarbeitung und koordiniert den Datenfluss innerhalb der CPU und zwischen anderen Computerkomponenten. 
+			Sie verfügt über eine Befehlsdecoder-Komponente, welche die aus dem Speicher abgerufenen Befehle interpretiert und sie in Mikrooperationen umwandelt, 
+			die die CPU ausführen kann. Die Steuereinheit weist andere CPU-Komponenten an, die erforderlichen Operationen auszuführen.
+		</p>
+		<p class="p2Header">
+			Register
+		</p>
+		<p>
+			Register sind kleine Speicherorte mit hoher Geschwindigkeit innerhalb der CPU. Sie speichern Daten, an denen die CPU gerade arbeitet, und 
+			ermöglichen einen schnellen Zugriff auf Daten. Register bieten schnellere Zugriffszeiten als andere Speicherebenen wie RAM oder Cache-Speicher.
+			CPUs haben verschiedene Arten von Registern, z. B.:<br>
+			<ul>
+				<li>Allzweckregister, die Betriebsdaten speichern</li>
+				<li>Befehlsregister, die den aktuell verarbeiteten Befehl speichern</li>
+				<li>Einen Programmzähler, der die Speicheradresse des nächsten abzurufenden Befehls speichert</li>
+			</ul>
+		</p>
+		<p class="p2Header">
+			ALU
+		</p>
+		<p>
+			Die arithmetische Logikeinheit (ALU) führt grundlegende arithmetische Operationen (Addition, Subtraktion, Multiplikation und Division) 
+			und logische Operationen (UND, ODER und NICHT) mit Daten aus. Sie empfängt Daten aus Registern innerhalb der CPU, verarbeitet sie auf der 
+			Grundlage der Anweisungen der Steuereinheit und erzeugt das Ergebnis.
+		</p>
+		<p class="p2Header">
+			Speicherverwaltungseinheit
+		</p>
+		<p>
+			Abhängig von der CPU-Architektur kann es eine separate Busschnittstelleneinheit oder Speicherverwaltungseinheit geben. Diese Komponenten 
+			übernehmen speicherbezogene Aufgaben wie die Verwaltung der CPU- und RAM-Interaktion. Sie verwaltet auch den Cache-Speicher - eine kleine und 
+			schnelle Speichereinheit, die sich innerhalb der CPU befindet - und den virtuellen Speicher, den die CPU für die Datenverarbeitung benötigt.
+		</p>
+		<p class="p2Header">
+			Taktgeber
+		</p>
+		<p>
+			Die CPU ist auf ein Taktsignal angewiesen, um ihre internen Operationen zu synchronisieren. Der Taktgeber erzeugt einen stetigen Impuls mit 
+			einer bestimmten Frequenz, und diese Taktzyklen koordinieren den Ablauf der CPU. Die Taktrate wird in Hertz (Hz) gemessen und bestimmt, wie 
+			viele Befehle die CPU pro Sekunde ausführen kann. Moderne CPUs verfügen über variable Taktraten, die sich je nach Workload anpassen, um Leistung 
+			und Stromverbrauch in Einklang zu bringen.
+		</p>
+		<p class="p1Header">
+			Wie funktioniert eine CPU?
+		</p>
+		<p>
+			Computerprozessoren arbeiten mit anderen Hardwarekomponenten und Softwareprogrammen zusammen, um Daten zu verarbeiten und den Informationsfluss 
+			innerhalb elektronischer Geräte zu verwalten. Sie arbeiten typischerweise in Zyklen, wobei jeder Befehlszyklus aus drei Hauptschritten besteht.<br>
+		<p class="p2Header">
+			Core-Prozessor-Zyklus
+		</p>
+		<ul>
+			<li>
+				Anweisungsabruf<br> Die CPU ruft Befehle aus dem Speicher ab. Die Befehle sind Binärcodes, die bestimmte Aufgaben oder Operationen für die CPU darstellen. 
+				Die Steuereinheit interpretiert den Befehl und bestimmt die auszuführende Operation. Die Steuereinheit identifiziert auch die spezifischen CPU-Komponenten, 
+				die für die Aufgabe erforderlich sind.
+			</li>
+			<li>
+				Anweisungsverarbeitung<br> Die CPU führt die angegebene Operation mit den abgerufenen Daten aus. Sie führt mathematische Berechnungen, 
+				logische Vergleiche, Datenänderungen oder Datentransfers zwischen Registern oder Speicherorten durch.
+			</li>
+			<li>
+				Ergebnisspeicherung<br> Nach der Ausführung von Anweisungen muss die CPU möglicherweise die Ergebnisse im Speicher speichern oder bestimmte Register mit neuen Daten aktualisieren. 
+				Der Programmzähler (PC) wird aktualisiert, sodass er auf die Adresse des nächsten abzurufenden Befehls verweist. Die CPU wiederholt den Zyklus und ruft Befehle nacheinander auf, dekodiert und führt sie aus.
+			</li>
+		</ul>
+		<p class="p2Header">
+			Kerne und Threads
+		</p>
+		<p>
+			Während in der Vergangenheit ein Single-Core-Prozessor Standard war, verfügen heute alle CPUs über mehrere physische Kerne. Ein Kern ist eine 
+			einzelne Verarbeitungseinheit innerhalb einer CPU. Mehr Kerne ermöglichen es der CPU, mehrere Threads (Befehlssequenzen) parallel zu verarbeiten, 
+			wodurch die Gesamtleistung erheblich verbessert wird. Anwendungen können das Multicore-Design nutzen, indem sie Aufgaben in kleinere Unteraufgaben 
+			aufteilen, die gleichzeitig erledigt werden können.
+		</p>
+		</p>
+		<p class="p2Header">Video</p>
+		<center><iframe width="560" height="315" src="https://www.youtube.com/embed/ergYcSJ3Zns?si=MGpbqOz_1IsmJOpe&amp;start=18" 
+		title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; 
+		picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></center><br>
+		<p>
+			Anmerkung: "Hyper-Threading" ist Intels Marketingbegriff für eine Technik mit dem Namen Simultaneous Multithreading (SMT). 
+			Diese Technik erlaubt es einem einzelnen physischen Prozessorkern, mehrere Threads gleichzeitig auszuführen, wie im Video erklärt wird. 
+			Die Grundidee (SMT) wurde aber schon vorher in der Wissenschaft diskutiert und nicht von Intel erfunden. Intel war jedoch der erste 
+			große Anbieter, der SMT massentauglich gemacht und vermarktet hat. Heutzutage verwenden alle großen CPU Anbieter (AMD, Apple, IBM) 
+			diese Technik, auch wenn sie von Unternehmen zu Unternehmen anders implementiert wird.
+		</p>
+	</div>
+	<div class="taskSix">
+		<b>Aufgabe 2:</b><br>
+		Vor euch findet ihr einen geöffneten Desktop-Computer. Schaut euch das bereitgestellte Video an und versucht selbstständig oder in Partnerarbeit
+		die eingebaute CPU aus und wieder einzubauen. <b>Beschreibt</b> in Stichpunkten, wie ihr die CPU aus- und wieder eingebaut habt (Ablaufplan)
+		und welche Besonderheiten zu beachten sind - zum Beispiel: Ist die Ausrichtung auf dem Sockel egal? etc. Alle dafür benötigten Werkzeuge könnt ihr euch vom Lehrertisch abholen.
+		<p class="p2Header">
+			Video
+		</p>
+		<center>
+			<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/j0UpY1Ohd-0?si=T6wYqMO2ojOGpt0R&amp;start=15" 
+			title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; 
+			picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+		</center>
+	</div>
+	<div class="pageEnd">
+		Wenn ihr mit dem Kapitel fertig seid, besucht eines der anderen ( 
+		<a href="gpu.html">GPU</a>, 
+		<a href="memory.html">Speicher</a> oder 
+		<a href="bus.html">Mainboard &#38; Anschlüsse</a>
+		), bis ihr am Ende beim Kapitel Abschluss landet.
+	</div>
+  </body>
+</html>

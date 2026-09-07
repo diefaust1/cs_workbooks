@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en-US"> 
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+	<meta name="author" content="Eric Faust" />
+    <title>Arbeitsheft: Informatik und Bildung</title>
+	
+	<link rel="stylesheet" href="css/style.css" />
+	<link rel="icon" href="media/28px_Faust.png" type="image/x-icon" />
+    <script defer src="scripts/busScript.js"></script>
+  </head>
+ 
+  <body>
+	<header>
+		Einführung in die Hardwaretechnik
+	</header>
+	<nav>
+		<ul class="nav">
+			<li><a href="index.html">VN-Architektur</a></li>
+			<li><a href="cpu.html">CPU</a></li>
+			<li><a href="gpu.html">GPU</a></li>
+			<li><a href="memory.html">Speicher</a></li>
+			<li><a href="bus.html">Mainboard &#38; Anschlüsse</a></li>
+			<li><a href="wrup.html">Abschluss</a></li>
+		</ul>
+	</nav>
+	<div class="subHeader">
+		Mainboard &#38; Anschlüsse
+	</div>
+	<div class="taskTwelve">
+    <p>
+        <b>Aufgabe 1:</b><br>
+        Unter der Aufgabenstellung findet ihr Informationen und Fragen zum Thema Mainboard &#38; Anschlüsse. Eure Aufgabe ist es, die Mindmap mit wichtigen Informationen zu <b>erweitern</b>. Fangt mit einer eigenen Recherche zum Thema an und versucht, die Fragen zu beantworten. 
+		Euch ist es freigestellt, auch die Texte und Videos von dieser Webseite zu verwenden. Falls auf dem A3-Blatt nicht genügend Platz ist, könnt ihr auch ein Extrablatt verwenden.
+    </p>
+    <p>
+        Diese <b>Leitfragen</b> können euch helfen, nach anfänglichen Informationen zu suchen. Sucht auch gerne nach anderen Informationen, die euch interessieren.
+        <ol>
+            <li>
+                Was ist das BIOS?
+            </li>
+            <li>
+                Von wo erhält das Mainboard seinen Strom?
+            </li>
+            <li>
+                Passt jede CPU auf mein Mainboard?
+            </li>
+            <li>
+                Was ist die Aufgabe des Mainboard-Chipsatzes?
+            </li>
+            <li>
+                Welche Anschlüsse für externe Geräte besitzt das Mainboard?
+            </li>
+        </ol>
+    </p>
+    <p>
+        <b>Aufgabe</b>:<br>
+        <b>Beschriftet</b> alle 11 Komponenten, die auf dem Mainboard blau umrandet sind. Verwendet euer Wissen aus der Recherche oder den bereitgestellten Texten und Videos. Falls ihr Hilfe benötigt, verwendet den "Hilfe"-Button. Dieser wird euch die Namen der 
+        Komponenten verraten. Die Namen sind nicht sortiert und müssen trotzdem zugeordnet werden. Am Ende könnt ihr mit der Musterlösung <b>vergleichen</b> - öffnet diese mit dem "Aufdecken"-Button. Ihr erhaltet das Bild vom Mainboard entweder 
+        vom Lehrertisch oder verwendent die digitale <a href="media/Mainboard_digital.pdf" target="_blank">Version</a>.
+    </p>
+    <div class="center">
+        <img src="media/mainboard_noLabels.png" alt="Mainboard ohne Beschriftung" width="60%" height="60%"><br>
+        
+    </div>
+    <div class="buttonContainer">
+        <button id="busHelpButton" type="button">Hilfe</button>
+        <button id="busButton" type="button">Aufdecken</button>
+    </div>
+    <div id="hiddenHelp" hidden>
+        <p>
+            <ul>
+				<li>
+					CPU Sockel
+				</li>
+				<li>
+					DIMM-Slots für SDRAM
+				</li>
+				<li>
+					Anschlüsse Netzteil
+				</li>
+				<li>
+					Externe Schnittstelle
+				</li>
+				<li>
+					Chipsatz
+				</li>
+				<li>
+					SATA-Anschlüsse für Laufwerke/Festplatten
+				</li>
+				<li>
+					PCIe-x16-Slot
+				</li>
+				<li>
+					Batterie für Echtzeituhr
+				</li>
+                <li>
+					PCIe-x1-Slot
+				</li>
+                <li>
+					M.2-Steckplatz für SSD
+				</li>
+                <li>
+					Anschluss für Gehäuse-Schnittstellen
+				</li>
+			</ul>
+        </p>
+    </div>
+    <div id="hiddenSolution" class="center" hidden>
+        <p>
+            <b>Beispiel Mainboard</b>
+        </p>
+
+        <img src="media/mainboard_beschriftet.png" alt="Mainboard mit Beschriftung" width="60%" height="60%">
+
+        <p>
+            <i>Bild von <a href="https://www.elektronik-kompendium.de/sites/com/0309231.htm">Elektronik Kompendium</a></i>
+        </p>
+    </div>
+    <p class="p1Header">Was ist die Hauptplatine (Mainboard) in einem Computer?</p>
+    <p>
+        Eine Hauptplatine ist eine wichtige Komponente eines jeden Computersystems. Sie ist das Rückgrat des Computers und verbindet alle anderen Komponenten wie CPU, 
+        RAM, Festplatte und Grafikkarte. Die verschiedenen Komponenten werden über Steckplätze oder Sockel mit der Hauptplatine verbunden, um ein zusammenhängendes 
+        Netzwerk von Hardwarekomponenten zu bilden. Darüber hinaus verfügen Motherboards auch über integrierte Funktionen wie USB-Anschlüsse für den Anschluss externer Geräte, 
+        Audiobuchsen für die Soundausgabe und Ethernet-Anschlüsse für die Netzwerkfähigkeit. Kurz gesagt, die Hauptplatine bildet die Grundlage eines jeden 
+        Computersystems und stellt den Rahmen für alle Funktionen dar, die für einen ordnungsgemäßen Betrieb erforderlich sind.
+    </p>
+    <p class="p1Header">Wofür wird die Hauptplatine verwendet?</p>
+    <p>
+        Eine Hauptplatine dient dazu, das Funktionieren eines Computersystems zu unterstützen. Sie stellt die notwendigen Anschlüsse, die Stromversorgung und die 
+        Ressourcen bereit, um die Hardwarekomponenten des Systems wie CPU, RAM, Speicherlaufwerke und Grafikkarte zu betreiben. Die Hauptplatine dient auch als 
+        Plattform für den Anschluss zusätzlicher Geräte und Peripheriegeräte wie optische Laufwerke, interne Lautsprecher und externe Festplatten. Darüber hinaus 
+        verfügen Hauptplatinen in der Regel über BIOS-Einstellungen, mit denen die Benutzer verschiedene Aspekte ihres Computersystems konfigurieren können. Dazu 
+        gehören das Ändern der Boot-Reihenfolge und das Einrichten von Übertaktungsprofilen zur Leistungssteigerung der Komponenten. Alles in allem ist ein Motherboard 
+        eine wesentliche Komponente, die für ein modernes Computererlebnis benötigt wird.
+    </p>
+    <p class="p1Header">Was ist der Mainboard-Chipsatz?</p>
+    <p>
+        Der Chipsatz ist eine Gruppe von integrierten Schaltkreisen, die zur Steuerung wichtiger Aspekte des Computersystems verwendet werden. Bei Hauptplatinen ist der 
+        Chipsatz für die Verbindung aller Komponenten innerhalb der Maschine, wie RAM und CPU, verantwortlich. Er fungiert auch als Brücke zwischen Software- 
+        und Hardware-Befehlen, um die Kommunikation zwischen beiden Bereichen zu erleichtern. Außerdem können bestimmte Chipsätze zusätzliche Funktionen wie USB 
+        3.0-Anschlüsse, SATA-Anschlüsse oder Übertaktungsfunktionen unterstützen. Die Wahl des richtigen Chipsatzes hängt letztlich davon ab, welche Art von Hardware 
+        Sie in Ihrem System einsetzen möchten und welche Aufgaben es erfüllen soll.
+    </p>
+    <p class="p1Header">Was ist das Mainboard-BIOS?</p>
+    <p>
+        Ein Mainboard-BIOS (Basic Input/Output System) ist ein Programm, das es dem Computer ermöglicht, mit seinen Hardwarekomponenten zu kommunizieren. 
+        Es ist für die Steuerung des Ein- und Ausschaltprozesses des Computers verantwortlich, bestimmt, welche Peripheriegeräte angeschlossen sind und wie sie verwendet 
+        werden, und stellt Treiber für kompatible Hardwaregeräte bereit. Darüber hinaus kann das BIOS zur Verwaltung verschiedener Systemeinstellungen verwendet werden, 
+        wie beispielsweise zur Konfiguration von Datum und Uhrzeit, Energieeinstellungen und Festplatteneinstellungen. Damit der Computer richtig funktioniert, ist es wichtig, 
+        das BIOS auf dem neuesten Stand zu halten, um die Kompatibilität mit neuen Hardwaregeräten oder Software zu gewährleisten.
+    </p>
+    
+    <p class="p1Header">Was ist ein Mainboard-VRM?</p>
+    <p>
+        Das Spannungsreglermodul oder "Voltage Regulator Module" (VRM) einer Hauptplatine ist für die Bereitstellung der von der CPU und anderen Komponenten benötigten 
+        Energie verantwortlich. Es regelt gleichzeitig Spannung, Strom und Leistung, um Hardwareschäden durch zu hohe Ströme zu vermeiden. Je nach Art der Hauptplatine 
+        können mehrere VRMs installiert sein, von denen jedes mit einem eigenen Satz von Leistungsphasen verbunden ist. Um die Leistung und Effizienz zu maximieren, 
+        verfügen die meisten Motherboards über mehrere VRMs, die parallel oder in Reihe geschaltet sind. Ein ordnungsgemäß funktionierendes VRM versorgt nicht nur alle 
+        Komponenten gleichmäßig mit Strom, sondern gewährleistet auch die Stabilität und Zuverlässigkeit des Systems.
+    </p>
+    
+    <p class="p2Header">Video</p>
+    <center><iframe width="560" height="315" src="https://www.youtube.com/embed/aKBBuk3nILc?si=RbOb8X5-fe_pOJbT&amp;start=15" title="YouTube video player" 
+    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></center>
+    <p>Anmerkung: Im Video wurde zum Thema des Spannungswandlers eine Grafik gezeigt, die die Spannung aus der Steckdose (240V) in die Niederspannung (1,35V) 
+    für die Komponenten des Computers reguliert. Dies ist nicht vollständig richtig erklärt. Die Spannung aus der Steckdose kommt erst in das Netzteil des 
+    Computers und wird von dort auf 3,3V, 5V oder 12V reguliert. Danach schickt das Netzteil die Spannung an den Spannungswandler, welcher sie in niedrigere 
+    Spannungen umwandelt, die die CPU, GPU, RAM und andere Komponenten tatsächlich benötigen. Moderne CPUs benötigen zum Beispiel oft nur 1,1V bis 1,4V. Die 
+    Information über die Kühlkörper ist korrekt. Beim Umwandeln der Spannung entsteht Wärme, und je mehr Strom fließt, desto mehr Wärme wird erzeugt. Deshalb 
+    sind viele Spannungswandler mit Kühlkörpern oder sogar Heatpipes ausgestattet, um die Wärme abzuleiten.</p>
+    <p class="p2Header">Video</p>
+    <center><iframe width="560" height="315" src="https://www.youtube.com/embed/mtKouIDCaZI?si=y2xpzSFE4yS22IIh" title="YouTube video player" frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen></iframe></center>
+	</div>
+	<div class="taskThirteen">
+		<b>Aufgabe 2:</b>
+		<p>
+			Vor euch findet ihr einen geöffneten Desktop-Computer. Schaut euch das Mainboard an und versucht selbstständig oder in Partnerarbeit, alle Anschlüsse und Komponenten zu finden, 
+			die auf der Liste stehen. <b>Beschreibt</b> wo sie zu finden sind in Stichpunkten auf einem Extra-Blatt.
+		</p>
+		<ol class="two-column-list">
+			<li>CPU-Sockel</li>
+			<li>RAM-Slots</li>
+			<li>PCIe-Steckplätze</li>
+			<li>Stromanschlüsse</li>
+			<li>SATA-Ports</li>
+			<li>USB-Header / Frontpanel-Anschluss</li>
+		</ol>
+	</div>
+	<div class="pageEnd">
+		Wenn ihr mit dem Kapitel fertig seid, besucht eines der anderen (
+		<a href="cpu.html">CPU</a>, 
+		<a href="gpu.html">GPU</a> und 
+		<a href="memory.html">Speicher</a>
+		), bis ihr am Ende beim Kapitel Abschluss landet.
+	</div>
+  </body>
+</html>

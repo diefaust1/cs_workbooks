@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en-US"> 
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+	<meta name="author" content="Eric Faust" />
+    <title>Arbeitsheft: Informatik und Bildung</title>
+	
+	<link rel="stylesheet" href="css/style.css" />
+	<link rel="icon" href="media/28px_Faust.png" type="image/x-icon" />
+    <script defer src="scripts/gpuScript.js"></script>
+  </head>
+  <body>
+	<header>
+		Einführung in die Hardwaretechnik
+	</header>
+	<nav>
+		<ul class="nav">
+			<li><a href="index.html">VN-Architektur</a></li>
+			<li><a href="cpu.html">CPU</a></li>
+			<li><a href="gpu.html">GPU</a></li>
+			<li><a href="memory.html">Speicher</a></li>
+			<li><a href="bus.html">Mainboard &#38; Anschlüsse</a></li>
+			<li><a href="wrup.html">Abschluss</a></li>
+		</ul>
+	</nav>
+	<div class="subHeader">
+		Graphics Processing Unit
+	</div>
+	<div class="taskSeven">
+    <p>
+        <b>Aufgabe 1:</b><br>
+        Unter der Aufgabenstellung findet ihr Informationen und Fragen zum Thema GPU. Eure Aufgabe ist es, die Mindmap mit wichtigen Informationen zu <b>erweitern</b>. Fangt mit einer eigenen Recherche zum Thema an und versucht, die Fragen zu beantworten. 
+		Euch ist es freigestellt, auch die Texte und Videos von dieser Webseite zu verwenden. Falls auf dem A3-Blatt nicht genügend Platz ist, könnt ihr auch ein Extrablatt verwenden.
+    </p>
+    <p>
+        Diese <b>Leitfragen</b> können euch helfen, nach anfänglichen Informationen zu suchen. Sucht auch gerne nach anderen Informationen, die euch interessieren.
+        <ol>
+            <li>
+                Welche Hauptaufgaben übernimmt eine GPU im Vergleich zur CPU?
+            </li>
+            <li>
+                Was ist der Unterschied zwischen GPU und Grafikkarte?
+            </li>
+            <li>
+                Müssen Grafikkarten immer separat gekauft werden?
+            </li>
+             <li>
+                Wie viele Kerne besitzt eine GPU?
+            </li>
+             <li>
+                Welche Grafikkarten-Hersteller gibt es? (Nenne mindestens drei und eins ihrer Produkte)
+            </li>
+        </ol>
+    </p>
+    <p class="p1Header">Was ist eine Grafikverarbeitungseinheit (GPU)?</p>
+    <p>
+        Eine Grafikverarbeitungseinheit ist eine elektronische Schaltung, die Computergrafik- und Bildverarbeitung auf einer Vielzahl von Geräten
+        beschleunigen soll. Zu diesen Geräten gehören Grafikkarten, Systemboards, Mobiltelefone und Personalcomputer (PCs). Durch die schnelle Ausführung
+        mathematischer Berechnungen verkürzt ein Grafikprozessor die Zeit, die ein Computer für die Ausführung mehrerer Programme benötigt. Dies macht sie
+        zu einem wesentlichen Wegbereiter für aufkommende und zukünftige Technologien wie maschinelles Lernen (ML), künstliche Intelligenz (KI) und Blockchain.
+    </p>
+    <p>
+        Vor der Erfindung der GPUs in den 1990er Jahren waren die Grafikcontroller in PCs und Videospiel-Controllern auf die zentrale Verarbeitungseinheit (CPU) eines
+        Computers angewiesen, um Aufgaben auszuführen. Seit den frühen 1950er Jahren sind CPUs die wichtigsten Prozessoren in einem Computer. Mit dem Aufkommen
+        von Computerspielen und computergestütztem Design (CAD) in den 1990er Jahren benötigte die Branche jedoch eine schnellere und effizientere Methode,
+        um Pixel schnell zu berechnen und darzustellen.
+    </p>
+    <p class="p1Header">Was ist der Unterschied zwischen einer GPU und einer Grafikkarte?</p>
+    <p>
+        Die Bezeichnungen Grafikverarbeitungseinheit und Grafikkarte werden oft synonym verwendet, sind aber nicht dasselbe. Grafikkarten sind Zusatzplatinen (AIB), die
+        an einer Stelle auf der Hauptplatine (Mainboard) eines Computers eingesetzt werden. Grafikkarten sind nicht in den Computer selbst eingebaut, sie sind austauschbare Karten.
+        Eine Grafikkarte wird komplett mit einer GPU geliefert. Die GPU ist die Hauptkomponente von Grafikkarten. Sie existiert zusammen mit anderen Komponenten wie
+        Video-RAM (VRAM) für Videospeicher, Anschlüssen (wie HDMI oder DisplayPort) und einer Kühleinheit. Eine GPU kann jedoch auch direkt in das Motherboard eingebaut
+        oder zusammen mit anderen Komponenten als All-in-One-Chip integriert werden.
+    </p>
+    <p>
+        <center><b>Grafikkarte</b></center>
+    </p>
+    <div class="imageContainer">
+        <img src="media/gpu.png" alt="GPU" width="40%" height="40%">
+    </div>
+    <p class="p1Header">Wie funktioniert eine GPU?</p>
+    <p>
+        Moderne GPUs enthalten typischerweise eine Reihe von Multiprozessoren. Jeder hat einen gemeinsamen Speicherblock sowie eine Reihe von Prozessoren und
+        entsprechende Register. Die GPU selbst verfügt über konstanten Speicher sowie über Gerätespeicher auf der Platine, auf der sie untergebracht ist.
+        Jede GPU funktioniert je nach Verwendungszweck und Hersteller unterschiedlich. Die Besonderheiten des Chips und der verwendeten Software, die die GPU nutzt,
+        sind leicht unterschiedlich. Mit der CUDA-Parallelverarbeitungssoftware von Nvidia können Entwickler die GPU beispielsweise speziell für fast jede
+        Allzweck-Parallelverarbeitungsanwendung programmieren. GPUs können eigenständige Chips sein, die als diskrete GPUs bezeichnet werden, oder in andere
+        Computerhardware integriert sein, sogenannte integrierte GPUs (iGPUs).
+    </p>
+    <ul>
+        <li>
+            <b>Diskrete GPU:</b><br>
+            Diskrete GPUs existieren als Chips, die sich voll und ganz der jeweiligen Aufgabe widmen. Während diese Aufgabe traditionell in der Grafik lag, können diskrete
+            GPUs jetzt als dedizierte Verarbeitung für Aufgaben wie ML oder komplexe Simulationen verwendet werden. Bei Verwendung in der Grafik befindet sich die
+            GPU normalerweise auf einer Grafikkarte, die in ein Motherboard gesteckt wird. Bei anderen Aufgaben befindet sich die GPU möglicherweise auf einer anderen
+            Karte oder einem Steckplatz direkt auf dem Motherboard selbst.
+        </li>
+        <li>
+            <b>Integrierte GPU:</b><br>
+            In den frühen 2010er Jahren begann man, eine Abkehr von diskreten GPUs zu beobachten. Die Hersteller begrüßten die Einführung der kombinierten CPU und GPU
+            auf einem Chip, der sogenannten iGPU. Die ersten dieser iGPUs für PCs waren Intels Celeron-, Pentium- und Core-Linien. Diese sind bei Laptops und PCs nach
+            wie vor beliebt. Eine andere Art von iGPU ist das System auf einem Chip (SoC), das Komponenten wie CPU, GPU, Speicher und Netzwerke enthält. Dies sind die
+            Arten von Chips, die typischerweise in Smartphones zu finden sind.
+        </li>
+    </ul>
+    <p class="p1Header">CPU vs. GPU</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Eigenschaft</th>
+                <th>CPU (Central Processing Unit)</th>
+                <th>GPU (Graphics Processing Unit)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Aufgabenbereich</td>
+                <td>Allgemeine Verarbeitung, <br>Steuerung von Programmen</td>
+                <td>Grafikverarbeitung, <br>parallele Berechnungen</td>
+            </tr>
+            <tr>
+                <td>Vielseitigkeit</td>
+                <td>Sehr vielseitig einsetzbar</td>
+                <td>Spezialisiert auf bestimmte Aufgaben</td>
+            </tr>
+            <tr>
+                <td>Anzahl der Kerne</td>
+                <td>Wenige (z.B. 4-16 Kerne)</td>
+                <td>Hunderte bis Tausende</td>
+            </tr>
+            <tr>
+                <td>Verarbeitungsweise</td>
+                <td>Linear (seriell)</td>
+                <td>Parallel (gleichzeitig)</td>
+            </tr>
+            <tr>
+                <td>Leistung bei Grafik/KI</td>
+                <td>Weniger effizient</td>
+                <td>Sehr leistungsstark</td>
+            </tr>
+            <tr>
+                <td>Entwicklung</td>
+                <td>Hauptprozessor seit Beginn der Computerentwicklung</td>
+                <td>Seit 1999 (z.B. Nvidia GeForce), stark gewachsen</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>
+        <b>Anmerkung:</b> CPU- und GPU-Kerne können nicht 1-zu-1 verglichen werden, da CPU-Kerne leistungsstärkere Rechenkerne sind, die komplexe
+        Befehle verarbeiten (z.B. Steuerung, Logik etc.). GPU-Kerne sind in den meisten Fällen einfacher aufgebaut und verfügen über weniger
+        Rechenleistung und Speicher. Sie sind dafür gemacht, viele kleine Aufgaben gleichzeitig sehr effizient auszuführen.
+    </p>
+    <p class="p1Header">
+        Wo kommen GPUs zum Einsatz?
+    </p>
+    <p>
+        <b>Aufgabe:</b><br>
+        Macht euch Notizen zum Thema „Wo kommen GPUs zum Einsatz?“ als Stichpunkte auf einem Extrablatt, verwendet dafür euer Wissen aus der Recherche. Danach <b>vergleicht</b> ihr eure Ideen mit dem Text. Mit dem Button könnt ihr euch Beispiele zum Einsatz von GPUs anschauen.
+    </p>
+    <button id="GPUTextButton" type="button">
+        Anzeigen
+    </button>
+    <div id="hiddenGPUText" hidden>
+        <ul>
+            <li>
+                <b>Videobearbeitung:</b><br>
+                Traditionell waren lange Rendering-Zeiten ein großes Hindernis bei der Verwendung von Consumer- und professioneller Bearbeitungssoftware. Seit
+                ihrer Erfindung haben GPUs die Verarbeitungszeiten und Rechenressourcen in Videobearbeitungsprogrammen wie Final Cut Pro und Adobe Premiere stetig
+                reduziert. Heutzutage können GPUs, die mit paralleler Verarbeitung und integrierter KI ausgestattet sind, die Bearbeitungsmöglichkeiten für alles,
+                von professionellen Bearbeitungssuiten bis hin zu Smartphone-Apps, dramatisch beschleunigen.
+            </li>
+            <li>
+                <b>Künstliche Intelligenz:</b><br>
+                KI und ihre vielen Anwendungen wären ohne GPU-Computing wohl unmöglich. Die Fähigkeit von GPUs, hochtechnische Probleme schneller und effizienter
+                zu lösen als herkömmliche CPUs, macht sie unverzichtbar. Grafikprozessoren sind entscheidende Komponenten vieler Supercomputer, insbesondere für
+                KI-Supercomputer. GPUs treiben viele führende KI-Anwendungen an, die hohe Geschwindigkeiten erfordern, um mit immer größeren Datensätzen zu trainieren.
+                KI-Modelle werden auf GPUs von Rechenzentren trainiert und ausgeführt, die in der Regel von Unternehmen betrieben werden, die wissenschaftliche
+                Forschung oder andere rechenintensive Aufgaben durchführen.
+            </li>
+            <li>
+                <b>Gaming:</b><br>
+                Die Gaming-Branche nutzte erstmals in den 1990er Jahren die Leistungsfähigkeit von GPUs, um das gesamte Spielerlebnis durch mehr Geschwindigkeit und
+                grafische Genauigkeit zu verbessern. Heutzutage sind viele Videospiele aufgrund von hyperrealen Szenarien, Echtzeit-Interaktionen und riesigen,
+                immersiven Welten sehr rechenintensiv. Trends im Gaming-Bereich wie Virtual Reality (VR), höhere Bildwiederholraten und höher aufgelöste
+                Bildschirme hängen alle von GPUs ab, um Grafiken in anspruchsvolleren Rechenumgebungen schnell zu liefern. Zu den GPUs für Spiele gehören AMD Radeon,
+                Intel Arc und Nvidia GeForce RTX.
+            </li>
+            <li>
+                <b>Visualisierung und Simulation:</b><br>
+                GPUs sind in vielen Branchen sehr gefragt, um das Erlebnis und die Schulungsmöglichkeiten komplexer Anwendungen zu verbessern,
+                z.B. bei Produktpräsentationen, medizinischen Kalkulationen oder auch geophysikalischen Darstellungen. GPUs sind von entscheidender
+                Bedeutung für fortschrittliche Visualisierungen. Sie helfen bei der Berufsausbildung von Feuerwehrleuten, Astronauten, Mechanikern und anderen mit
+                3D-Animationen. Des Weiteren werden auch Virtual Reality (VR) und Augmented Reality (AR) bei der Ausbildung eingesetzt, um den Lehrlingen neue
+                Erfahrungen hautnah zu vermitteln.
+            </li>
+        </ul>
+    </div>
+    <p class="p2Header">
+        Video
+    </p>
+    <center>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/KRC1Mlz4rCk?si=Z_YqwYREd4lm9raD" title="YouTube video player"
+        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </center>
+	</div>
+	<div class="taskEight">
+		<b>Aufgabe 2:</b><br>
+		Vor euch findet ihr einen geöffneten Desktop-Computer. Schaut euch das bereitgestellte Video an und versucht selbstständig oder in Partnerarbeit, die
+		eingebaute GPU aus- und wieder einzubauen. <b>Beschreibt</b> in Stichpunkten, wie ihr die GPU aus- und wieder eingebaut habt (Ablaufplan)
+		und welche Besonderheiten zu beachten sind, zum Beispiel: Was verbindet die Grafikkarte mit dem Mainboard? etc. Alle dafür benötigten
+		Werkzeuge könnt ihr euch vom Lehrertisch abholen.<br>
+		<p class="p2Header">
+            Video
+        </p>
+		<center>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/iPSVTAdAvO0?si=TtHqNVuiC60RDj17" title="YouTube video player"
+			frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+			referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </center>
+	</div>
+	<div class="pageEnd">
+		Wenn ihr mit dem Kapitel fertig seid, besucht eines der anderen (
+		<a href="cpu.html">CPU</a>,
+		<a href="memory.html">Speicher</a> oder
+		<a href="bus.html">Mainboard &#38; Anschlüsse</a>
+		), bis ihr am Ende beim Kapitel Abschluss landet.
+	</div>
+  </body>
+</html>

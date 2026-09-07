@@ -1,0 +1,37 @@
+body{
+    background-color: #BABABA;
+    height: auto;
+    width: auto;
+}
+
+header{
+    background-color: #e47373;
+    height: auto;
+    width: auto;
+    text-align: center;
+}
+
+nav{
+    background-color: #94e498;
+    height: auto;
+    width: auto;
+}
+
+main{
+    background-color: #9fabec;
+    height: auto;
+    width: auto;
+}
+
+aside{
+    background-color: #ec92e8;
+    height: auto;
+    width: auto;
+}
+
+footer{
+    background-color: #beee7f;
+    height: auto;
+    width: auto;
+}
+

@@ -1,0 +1,42 @@
+ <!doctype html>
+<html lang="en-US"> 
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+	<meta name="author" content="Eric Faust" />
+    <title>Arbeitsheft: Informatik und Bildung</title>
+	
+	<link rel="stylesheet" href="css/style.css" />
+	<link rel="icon" href="media/28px_Faust.png" type="image/x-icon" />
+  </head>
+ 
+  <body>
+	<header>
+		Einführung in die Hardwaretechnik
+	</header>
+	<nav>
+		<ul class="nav">
+			<li><a href="index.html">VN-Architektur</a></li>
+			<li><a href="cpu.html">CPU</a></li>
+			<li><a href="gpu.html">GPU</a></li>
+			<li><a href="memory.html">Speicher</a></li>
+			<li><a href="bus.html">Mainboard &#38; Netzteil</a></li>
+			<li><a href="wrup.html">Wrap-Up</a></li>
+		</ul>
+	</nav>
+	<div class="subHeader">
+		Wrap-Up
+	</div>
+	<div class="taskFour">
+		Aufgabe 4:<br>
+		<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/j0UpY1Ohd-0?si=T6wYqMO2ojOGpt0R&amp;start=15" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" refer		rerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> 
+	</div>
+	<div class="taskFive">
+		Aufgabe 5:
+	</div>
+	<div class="taskSix">
+		Aufgabe 6:
+	</div>
+  </body>
+
+</html>

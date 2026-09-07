@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en-US"> 
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+	<meta name="author" content="Eric Faust" />
+    <title>Arbeitsheft: Informatik und Bildung</title>
+	
+	<link rel="stylesheet" href="css/style.css" />
+	<link rel="icon" href="media/28px_Faust.png" type="image/x-icon" />
+	<script defer src="scripts/memoryScript.js"></script>
+  </head>
+ 
+ <body>
+	<header>
+		Einführung in die Hardwaretechnik
+	</header>
+	<nav>
+		<ul class="nav">
+			<li><a href="index.html">VN-Architektur</a></li>
+			<li><a href="cpu.html">CPU</a></li>
+			<li><a href="gpu.html">GPU</a></li>
+			<li><a href="memory.html">Speicher</a></li>
+			<li><a href="bus.html">Mainboard &#38; Anschlüsse</a></li>
+			<li><a href="wrup.html">Abschluss</a></li>
+		</ul>
+	</nav>
+	<div class="subHeader">
+		Speicher Verwaltung
+	</div>
+	<div class="taskNine">
+        <p>
+        <b>Aufgabe 1:</b><br>
+            Unter der Aufgabenstellung findet ihr Informationen und Fragen zum Thema Speicher. Eure Aufgabe ist es, die Mindmap mit wichtigen Informationen zu <b>erweitern</b>. Fangt mit einer eigenen Recherche zum Thema an und versucht, die Fragen zu beantworten. 
+            Euch ist es freigestellt, auch die Texte und Videos von dieser Webseite zu verwenden. Falls auf dem A3-Blatt nicht genügend Platz ist, könnt ihr auch ein Extrablatt verwenden. Unter den Fragen findet ihr außerdem ein Kreuzworträtsel, 
+            das ihr als Extrablatt erhaltet oder auch als digitale <a href="media/riddle2_ready.pdf" target="_blank">Version</a>.
+        </p>
+        <p>
+            Diese <b>Leitfragen</b> können euch helfen, nach anfänglichen Informationen zu suchen. Sucht auch gerne nach anderen Informationen, die euch interessieren.
+            <ol>
+                <li>
+                    Welche Orientierungswerte gibt es, wenn es um RAM-Speicher geht? 
+                </li>
+                <li>
+                    Wie viel Arbeitsspeicher ist (z.B. von Microsoft) für den Computer empfohlen?
+                </li>
+                <li>
+                    Wann würdest du eine HDD statt einer SSD verwenden?
+                </li>
+                <li>
+                    Warum braucht eine HDD länger, um Informationen zu speichern als eine SSD?
+                </li>
+                <li>
+                    Welche Daten könnt ihr auf einer Festplatte speicher? (Nenne mindestens drei)
+                </li>
+            </ol>
+        </p>
+        <p>
+			<b>Aufgabe:</b><br>
+            <b>Ergänzt</b> die drei fehlenden Speichertypen in der Mindmap auf dem A3-Blatt. Verwendet euer Wissen aus der Recherche oder den Texten und Videos der Webseite.
+        </p>
+
+        <button id="memoryClueButton" type="button">Tipp</button>
+
+        <p id="hiddenClueMemory" hidden>
+		    Tipp: Ein Speichertyp ist ein flüchtiger Speicher, ein anderer sind zwei Festspeicher und der dritte steht mit der GPU in Verbindung. Die Reihenfolge der Speichertypen spielt keine Rolle.
+		</p>
+		
+        <p class="p2Header">
+			Kreuzworträtsel
+		</p>
+		<div class="imageContainer">
+			<img src="media/riddle2_ready.svg" alt="Crossword2" width="100%" height="100%">
+		</div>
+        <p>
+			Mit dem Aufdecken-Button könnt ihr euch die Lösung des Kreuzworträtsels anschauen.
+		</p>
+		<button id="crosswordButton2" type="button">Aufdecken</button>
+		<div class="center">
+			<p id="hiddenCrossword2" hidden>
+			<img src="media/riddle2_solved.svg" alt="solvedCrossword2" width="60%" height="60%">
+			</p>
+		</div>
+        <p class="p1Header">Was ist Datenspeicherung?</p>
+        <p>
+            Die Datenspeicherung bezieht sich auf magnetische, optische oder mechanische Medien, die digitale Informationen für laufende oder zukünftige Operationen aufzeichnen und aufbewahren. Es gibt zwei Arten von digitalen Informationen: Eingabe- und Ausgabedaten. 
+            Benutzer stellen die Eingabedaten bereit, und der Computer stellt die Ausgabedaten bereit. Die CPU eines Computers kann jedoch ohne die Eingabe des Benutzers keine Berechnungen durchführen oder Ausgabedaten erzeugen. Ihr als Benutzer könnt die Eingabedaten 
+            direkt in den Computer eingeben. Zu Beginn des Computerzeitalters stellte man jedoch fest, dass die ständige manuelle Eingabe von Daten zeit- und energieaufwendig ist. Eine Lösung war die Erfindung des Computerspeichers, Arbeitsspeicher (Random Access Memory, RAM) 
+            und Festwertspeicher (Read-Only Memory, ROM). 
+        </p>
+        <p class="p1Header">RAM und ROM</p>
+        <p>
+            RAM ist ein flüchtiger Speicher, was bedeutet, dass die im Modul vorübergehend gespeicherten Informationen gelöscht werden, sobald du deinen Computer neu startest oder herunterfährst. Der Grund dafür ist, dass die Informationen elektronisch auf Transistoren 
+            gespeichert werden, sodass die Daten verschwinden, wenn kein Strom mehr vorhanden ist. Jedes Mal, wenn Sie Dateien oder Daten anfordern, werden diese entweder von der Festplatte des Computers oder aus dem Internet abgerufen. Die Daten werden im RAM gespeichert, 
+            sodass sie immer sofort verfügbar sind, wenn Sie von einem Programm in ein anderes oder von einer Seite zur anderen wechseln. Wenn der Computer heruntergefahren wird, wird der Arbeitsspeicher gelöscht, bis der Prozess wieder beginnt. Der flüchtige Arbeitsspeicher 
+            kann vom Benutzer leicht gewechselt, aufgerüstet oder erweitert werden, wodurch Sie die Leistung Ihres Systems verbessern können.
+        </p>
+        <p>
+            ROM ist ein nichtflüchtiger Speicher, das heißt, die Informationen sind dauerhaft auf dem Chip gespeichert. Der Speicher ist also nicht von elektrischem Strom abhängig. Stattdessen werden die Daten mittels Binärcode in einzelne Zellen geschrieben. Nichtflüchtiger 
+            Speicher wird für die Aspekte des Computers verwendet, die sich nicht ändern, wie beispielsweise für das anfängliche Hochfahren des Computers oder die Firmware-Anweisungen, die deinen Drucker zum Laufen bringen. Das Ausschalten des Computers hat keinen Einfluss 
+            auf den ROM-Speicher. Nichtflüchtiger Speicher (Festwertspeicher) kann zudem vom Benutzer nicht verändert werden.
+        </p>
+        <p class="p1Header">HDD und SSD</p>
+        <p>
+            Heutzutage werden ROM-Speicher meist für das Speichern von Firmware-Programmen verwendet, die essenziell für den Startvorgang von Computersystemen sind. Ein Beispiel dafür ist das BIOS (Basic Input/Output System) oder auch UEFI 
+            (Unified Extensible Firmware Interface), welches auf jedem Computersystem vorhanden ist. Zur Speicherung von Daten werden meist Massenspeicher wie HDDs und SSDs verwendet. 
+            <ul>
+                <li>
+                    <p>
+                        Eine Festplatte oder <b>Hard Disk Drive</b> (HDD) ist ein Datenspeichergerät, das in Laptops und Desktop-Computern verwendet wird. Das Betriebssystem (OS) steuert die Festplatte und gibt ihr Anweisungen, Daten zu lesen oder zu speichern, je nachdem, 
+                        was ein Programm gerade braucht. Wie schnell die Festplatte Daten lesen oder schreiben kann, hängt allein von der Festplatte selbst ab. Früher waren HDDs riesige Geräte, die ganze Räume füllten und nur etwa 3,75 Megabyte speichern konnten. 
+                        Heute dagegen passen Festplatten bequem in einen normalen PC und bieten über viele Terabyte an Speicherplatz.
+                    </p>
+                    <p>
+                        Eine Festplatte (HDD) enthält scheibenförmige Bauteile, die man Platten oder „Platters“ nennt. Auf diesen Platten werden die Daten gespeichert mithilfe elektrischer Ladungen. Diese Ladungen stammen vom Schreib-/Lesekopf, der an einem sogenannten 
+                        Aktuatorarm befestigt ist. Der Schreib-/Lesekopf wird durch den Prozessor (CPU) und das Mainboard (Systemplatine) gesteuert und weiß dadurch genau, wo er sich auf der Platte bewegen muss. Jede Platte hat einen eigenen Arm mit magnetischen 
+                        Schreib-/Leseköpfen. Die Platten drehen sich sehr schnell und sind in sogenannte Sektoren unterteilt. Diese Sektoren bestehen aus tausenden kleinster Einheiten, den Bits. Jedes Bit kann eine elektrische Ladung speichern. Der Schreib-/Lesekopf 
+                        liest die Bits und erkennt anhand der Ladung, ob sie für eine 1 oder eine 0 im binären Code stehen. Das ist die Sprache, die Computer verstehen.
+                    </p>
+                    <div class="imageContainer">
+                        <img src="media/hdd_open.jpg" alt="HDD Open" width="40%" height="40%">
+                    </div>
+                    <p>
+                        <center><b>HDD geöffnet</b></center>
+                    </p>
+                    <p>
+                        Falls ihr noch mehr zu HDDs erfahren wollt, ist hier ein Link zu <a href="https://www.elektronik-kompendium.de/sites/com/0610291.htm">HDDs</a>.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <b>Solid-State-Drives</b> (SSDs) speichern und lesen Daten mithilfe von elektronischen Schaltungen (Flash-Memory). Die Daten werden in sogenannten „Blöcken“ gespeichert und diese Blöcke können immer nur komplett auf einmal beschrieben werden. 
+                        Wenn Daten verändert werden sollen, muss der ganze Block zuerst gelöscht und dann an einem neuen Block vollständig neu geschrieben werden. Das geschieht, um zusammenhängende Daten ordentlich zu speichern und schnelle Reaktionszeiten zu ermöglichen. 
+                        Diese Speicherblöcke sind nicht besonders langlebig und können beim Löschen beschädigt werden. Dieser Vorgang sorgt dafür, dass sich eine SSD mit der Zeit abnutzt. Deshalb sind die meisten SSDs mit einer sogenannten „Wear-Leveling“-Technologie 
+                        ausgestattet. Diese sorgt dafür, dass sich die Abnutzung gleichmäßig auf alle Speicherbereiche verteilt, wodurch die Lebensdauer der SSD deutlich verlängert wird.
+                    </p>
+                    <p>
+                        Controller steuern den gesamten Flash-Speicher in einer SSD. Sie geben den Speicherzellen Anweisungen, welche Daten gespeichert, gelesen oder verändert werden sollen. Außerdem sorgen sie dafür, dass die Daten gleichmäßig verteilt werden und 
+                        übernehmen die "Müllsammlung". Das heißt, sie löschen überflüssige oder veraltete Daten, um wieder Speicherplatz freizugeben. SSDs nutzen oft eine Technik, bei der häufig angeforderte Daten zwischengespeichert werden, ähnlich wie der Arbeitsspeicher (RAM). 
+                        Diese Art der Zwischenspeicherung sorgt für schnellere Reaktionszeiten, vor allem im Vergleich zu HDDs, bei denen solche Daten deutlich langsamer abgerufen werden können. Ein weiterer Vorteil von SSDs ist, dass sie weniger Strom verbrauchen als HDDs, 
+                        weil sie keine beweglichen Teile enthalten. Allerdings benötigen sie eine stabile Stromversorgung, um richtig zu funktionieren. Wenn eine SSD keinen Strom mehr bekommt, kann sie mit der Zeit Daten verlieren. Deshalb sind viele SSDs mit einer integrierten 
+                        Batterie ausgestattet, die dafür sorgt, dass sie auch im Leerlauf ihre Daten sicher behalten können.
+                    </p>
+                    <div class="imageContainer">
+                        <img src="media/ssd_open.jpg" alt="SSD ohne Gehäuse" width="40%" height="40%">
+                    </div>
+                    <p>
+                        <center><b>SSD ohne Gehäuse</b></center>
+                    </p>
+                    <p>
+                        Falls ihr noch mehr zu SSDs erfahren wollt, ist hier ein Link zu <a href="https://www.elektronik-kompendium.de/sites/com/1105091.htm">SSDs</a>.
+                    </p>
+                </li>
+            </ul>
+            <table>
+                <thead>
+                    <tr>
+                    <th>Eigenschaft</th>
+                    <th>HDD (Festplatte)</th>
+                    <th>SSD (Solid-State-Drive)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Speicherkapazität</td>
+                        <td>Typische Größen: 1 bis 24 TB
+                        <td>Typische Größen: 128 GB bis 2 TB</td>
+                    </tr>
+                    <tr>
+                        <td>Leistung</td>
+                        <td>Langsamer: ca. 500 MB/s</td>
+                        <td>Sehr schnell: bis zu 7000 MB/s</td>
+                    </tr>
+                    <tr>
+                        <td>Lebensdauer / Haltbarkeit</td>
+                        <td>Längere Lebensdauer <br>auch bei Nichtbenutzung</td>
+                        <td>Datenverlust nach längerer <br>Zeit ohne Strom möglich<br>Begrenzte Schreibzyklen</td>
+                    </tr>
+                    <tr>
+                        <td>Stromverbrauch</td>
+                        <td>Höherer Stromverbrauch <br>durch bewegliche Teile</td>
+                        <td>Niedriger Stromverbrauch, <br>keine beweglichen Teile</td>
+                    </tr>
+                    <tr>
+                        <td>Preis (Stand 2022)</td>
+                        <td>Günstiger bei großen Speichergrößen<br>500 GB ≈ 24 USD</td>
+                        <td>Teurer pro GB, aber schneller<br>500 GB ≈ 55 USD</td>
+                    </tr>
+                    <tr>
+                        <td>Einsatzbereich</td>
+                        <td>Gut für langfristige Datenspeicherung und Backups</td>
+                        <td>Ideal für alltägliche Nutzung, schnelles Arbeiten und große Datenmengen</td>
+                    </tr>
+                </tbody>
+            </table>
+        </p>
+        <p class="p1Header">
+            Was ist der Arbeitsspeicher (RAM)?
+        </p>
+        <p>
+            Der Arbeitsspeicher, kurz RAM (Random Access Memory), ist das Gedächtnis des Computers und für die vorübergehende Speicherung von Daten zuständig, während Programme ausgeführt werden. Ganz im Gegensatz zu langfristigen Speichermedien wie Festplatten oder SSDs 
+            ermöglicht der RAM den schnellen Zugriff auf Daten, unabhängig vom tatsächlichen Speicherort. Dies macht ihn zu einem essenziellen Bestandteil für die Leistungsfähigkeit des Computers. Arbeitsspeicher (RAM) ist ein flüchtiger Speicher. Die Kapazität des RAM ist 
+            begrenzt und wenn der verfügbare Speicherplatz erschöpft ist und nicht mehr für die laufenden Prozesse zur Verfügung steht, kann dies zu einer Verlangsamung des Systems führen. Moderne Betriebssysteme nutzen Techniken wie beispielsweise das Paging, um den Mangel 
+            an Speicher durch Auslagerung auf sekundäre Speicher zu kompensieren.
+        </p>
+        <p>
+                <center><b>RAM-Module</b></center>
+            </p>
+            <div class="imageContainer">
+                <img src="media/ram.jpg" alt="Random Access Memory" width="40%" height="40%">
+            </div>
+        <p class="p1Header">
+            Paging
+        </p>
+        <p>
+            Paging ist eine Technik zur Speicherverwaltung, bei der das Betriebssystem weniger genutzte Daten aus dem Arbeitsspeicher (RAM) in eine Auslagerungsdatei auf der Festplatte oder SSD verschiebt. So können mehr Anwendungen gleichzeitig betrieben werden als der 
+            physische RAM normalerweise zulässt. Zu häufige Zugriffe auf die Auslagerungsdatei können die Systemleistung aber dennoch beeinträchtigen, da die Festplattenzugriffe langsamer als die RAM-Zugriffe sind.
+        </p>
+        <p class="p1Header">
+            Wie viel Arbeitsspeicher (RAM) benötige ich?
+        </p>
+        <p>
+            Wie viel RAM dem Computer zur Verfügung steht, beeinflusst, wie effizient Aufgaben bewältigt und Programme ausgeführt werden können. RAM-Module sind in verschiedenen Größen erhältlich. Für die beste Systemleistung empfiehlt sich aber eine Installation von 
+            Modulen in Paaren (z.B. zwei 8 GB Module statt einem 16 GB Modul), denn so kann der Dual-Channel Modus genutzt werden, welcher die Datenübertragungsrate effektiv erhöht.
+            <ul>
+                <li>
+                    <p>
+                        Für die alltägliche Computernutzung, wie das Surfen im Internet, Office-Anwendungen oder leichten Multitasking-Aufgaben, reichen 4 bis 8 Gigabyte (GB) aus. Microsoft selbst empfiehlt in den Systemanforderungen für Windows 11 mindestens 4 GB.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Aufgrund zunehmender Anforderungen moderner Software und Betriebssysteme ist eine Aufrüstung auf mindestens 8 bis 16 GB für eine bessere zukunftssichere Leistung zu empfehlen. Für anspruchsvollere Anwendungen wie professionelle Videobearbeitung, 
+                        Grafikdesign, umfangreiche Datenanalysen oder das Spielen aktueller Videospiele wird inzwischen ein Minimum von 16 GB RAM empfohlen.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Nutzer, die häufig mit sehr speicherintensiven Programmen arbeiten oder beim Gaming auf höchsten Einstellungen optimieren möchten, sollten sogar 32 GB RAM oder mehr in Betracht ziehen.
+                    </p>
+                </li>
+            </ul>
+        </p>
+        <p class="p2Header">Videos</p>
+        <div class="videoContainer">	
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/JTNWaFbJPw0?si=azh6cC-UqjeIlFML" title="YouTube video player" 
+            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/7Cw2MvuTqkM?si=jDvHbsNCGaKgmjY9" title="YouTube video player" 
+            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+       
+	</div>
+    <div class="taskTen">
+        <b>Aufgabe 2:</b><br> 
+        Mit dem Button könnt ihr eure Ergebnisse mit der Musterlösung zur Mindmap <b>vergleichen</b>.<br>
+        <button id="displayButton" type="button">Anzeigen</button>
+        <div class="center">
+            <p id="hiddenImage" hidden>
+            <img src="media/VNA_Diagram_filled.svg" alt="Von-Neumann-Architektur">
+            </p>
+		</div>
+	</div>
+	<div class="taskEleven">
+		<b>Aufgabe 3:</b><br>
+		Vor euch findet ihr einen geöffneten Desktop-Computer. Schaut euch das bereitgestellte Video an und versucht selbstständig oder in Partnerarbeit, die eingebauten RAM-Riegel aus- und wieder einzubauen. <b>Beschreibt</b> in Stichpunkten, 
+        wie ihr die RAM-Riegel aus- und wieder eingebaut habt (Ablaufplan) und welche Besonderheiten zu beachten sind, wie zum Beispiel: Kann ich mehrere RAM-Typen mischen? Alle dafür benötigten Werkzeuge können vom Lehrertisch abgeholt werden.
+		<p class="p2Header">
+			Videos
+		</p>
+		<div class="videoContainer">
+			<center><iframe width="560" height="315" src="https://www.youtube.com/embed/NmVyqhozKhU?si=mokfMrkv6TNsAncA" title="YouTube video player" frameborder="0" 
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+			referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></center>
+		
+			<iframe width="315" height="560" src="https://youtube.com/embed/n4sln3cTocU?si=PoCXwEGaJ8YWun9B" title="YouTube video player" frameborder="0" 
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+			<p>
+				Anmerkung: Das zweite Video (YT-Short) enthält zusätzliche Informationen, falls ihr wissen wollt, wie eine HDD/SSD an einen Computer angeschlossen wird. Dieses Video braucht ihr nicht für die RAM-Aufgabe.
+			</p>
+		</div>
+	</div>
+	<div class="pageEnd">
+		Wenn ihr mit dem Kapitel fertig seid, besucht eines der anderen (
+		<a href="cpu.html">CPU</a>, 
+		<a href="gpu.html">GPU</a> oder  
+		<a href="bus.html">Mainboard &#38; Anschlüsse</a>
+		), bis ihr am Ende beim Kapitel Abschluss landet.
+	</div>
+  </body>
+</html>

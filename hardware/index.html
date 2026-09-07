@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en-US">
+  
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+	<meta name="author" content="Eric Faust" />
+    <title>Arbeitsheft: Informatik und Bildung</title>
+	
+	<link rel="stylesheet" href="css/style.css" />
+	<link rel="icon" href="media/28px_Faust.png" type="image/x-icon" />
+	<script defer src="scripts/indexScript.js"></script>
+  </head>
+ 
+  <body>
+	<header>
+		Einführung in die Hardwaretechnik
+	</header>
+	<nav>
+		<ul class="nav">
+			<li><a href="index.html">VN-Architektur</a></li>
+			<li><a href="cpu.html">CPU</a></li>
+			<li><a href="gpu.html">GPU</a></li>
+			<li><a href="memory.html">Speicher</a></li>
+			<li><a href="bus.html">Mainboard &#38; Anschlüsse</a></li>
+			<li><a href="wrup.html">Abschluss</a></li>
+		</ul>
+	</nav>
+	<div class="subHeader">
+		Von Neumann Architektur
+	</div>
+	<div class="intro">
+		<p class="p2Header">Einführung</p>
+			<p>
+				Dieses Arbeitsheft behandelt das Thema <b>Computer</b> und soll euch vorbereiten, selbst einen Computer zusammenzubauen. Des Weiteren erhaltet ihr Wissen über seine einzelnen Komponenten und wie sie zusammenarbeiten. 
+				Ihr startet auf dieser Seite (Von-Neumann-Architektur) und bereitet die Mindmap vor, welche euch durch das gesamte Arbeitsheft begleitet. Falls ihr keine Mindmap im A3-Format vor euch findet, geht zum Lehrertisch 
+				und holt euch eine von mir ab (oder nehmt die digitale <a href="media/MindMap_A3.pdf" target="_blank">Version</a>). Eure Aufgabe ist es, die einzelnen Aufgaben jedes Kapitels zu bewältigen und eure Mindmap Schritt für Schritt zu erweitern. 
+				Auf dem Weg werdet ihr praktische Aufgaben bewältigen, bei denen ihr an einem echten Computer Komponenten wie Grafikkarte, CPU, RAM etc. aus- und wieder einbaut. Am Ende sollte eine große Mindmap entstehen, mit der ihr arbeiten und lernen könnt. 
+				Nachdem ihr dieses Kapitel bewältigt habt, könnt ihr euch eines der anderen vier Kapitel (CPU, GPU, Speicher oder Mainboard und Anschlüsse) aussuchen. Welches ihr wählt, ist euch überlassen. Viel Erfolg :)
+			</p>
+	</div>
+	<div class="taskOne">
+		<b>Aufgabe 1:</b> 
+		<p>
+			Im Folgenden werden drei verschiedene Szenarien beschrieben. Verwendet euer Vorwissen, um das Problem zu <b>beschreiben</b> und was eine mögliche Lösung sein könnte. 
+			Da offen gestellte Probleme verschiedene Ursachen haben können, kann es auch mehrere Lösungen geben.<br>
+			a) Im Browser sind viele Tabs offen und der Computer wird langsamer.<br>
+			b) Ihr könnt eure Bilder nicht vom Handy auf euren Computer übertragen.<br>
+			c) Der Computer wird sehr warm und die Lüfter laut.
+		</p>
+		<button id="indexHelpButton" type="button">Hilfe</button>
+		<div>
+			<p id="indexHiddenText" hidden>
+				Falls euch keine Lösung einfällt, könnt ihr auch ausprobieren, was passiert, wenn ihr zum Beispiel mehrere Tabs im Browser öffnet und ein Video abspielt. 
+				Dazu könnt ihr die Auslastung des Computers (CPU, Arbeitsspeicher…) im Task-Manager beobachten.
+			</p>
+		</div>
+	</div>
+	<div class="taskTwo">
+		<b>Aufgabe 2:</b>
+		</p>
+			Vor euch findet ihr eine Mindmap auf einem A3-Blatt zum Thema der Von Neumann Architektur. Schaut euch die folgenden Informationen an und <b>füllt</b> die frei stehenden Boxen aus. Die drei untersten Boxen, 
+			auf eurem ausgedruckten A3-Blatt, können freigelassen werden. Diese werden ersichtlich wenn das Thema des Speichers bearbeitet wurde.
+		</p>
+		<div class="center">
+			<img src="media/VNA_Diagram_blank_index.svg" alt="Von Neumann Architektur"><br>
+		</div>
+		<p>
+		Das Funktionsprinzip eines Computers wurde vom ungarischen Mathematiker John von Neumann entwickelt. Zwar hat sich die praktische Ausprägung im Laufe der Zeit und der technischen Weiterentwicklung immer wieder verändert, 
+		aber die grundsätzliche Architektur ist gleich geblieben.
+		</p>
+		Die Architektur des Von-Neumann-Rechners besteht aus vier Funktionseinheiten:<br>
+		<ul class="tableVNA">
+			<li>Rechenwerk (Logical Unit)</li>
+			<li>Steuerwerk (Control Unit)</li>
+			<li>Speicherwerk (Memory)</li>
+			<li>Ein-/Ausgabewerk (Input/Output)</li>
+		</ul>
+		Im Von-Neumann-Rechner werden die wichtigsten Einheiten Rechenwerk und Steuerwerk in der eigentlichen Verarbeitungseinheit, 
+		dem Prozessor (Central Processing Unit - CPU), vereint. Die CPU übernimmt die Ausführung der Befehle und die Ablaufsteuerung. 
+		Die Befehle werden nacheinander, Schritt für Schritt, ausgeführt. Die Befehle und Daten werden vom Steuerwerk aus dem Speicher 
+		geholt. Da Grafikkarten (Graphics Processing Unit  - GPU) in den 1950er Jahren noch nicht essentiell für Alltags-Computer mit 
+		grafischen Ansprüchen waren, wurden diese nicht speziell in der Von-Neumann-Architektur berücksichtigt. Sie würden in der 
+		Von-Neumann-Weltsicht heutzutage als weitere Verarbeitungseinheit neben der CPU angesehen werden. Die GPU besitzt auch ein Rechen- und 
+		Steuerwerk genau wie die CPU. Die Verbindung zwischen den Prozessoren (CPU und GPU), Speicherwerk und Ein-/Ausgabewerk bezeichnet 
+		man als Bus-System, der im eigentlichen Von-Neumann-Rechner unerwähnt bleibt, aber in der Praxis eine wichtige Rolle spielen. 
+		Im Von-Neumann-Rechner werden alle Instruktionen und Daten über das Bus-System geführt. Hier kann es schnell zu Engpässen kommen, 
+		wenn Daten aus dem Speicher geladen werden und gleichzeitig neue Instruktionen ausgeführt werden müssen, um das Rechenwerk 
+		optimal auszulasten. Man spricht deshalb auch vom „Von-Neumann'schen Flaschenhals“. Obwohl der Von-Neumann-Rechner ein sehr 
+		einfaches Modell eines Computers ist, basieren die meisten modernen Computer auf diesem einfachen Prinzip.
+		<p>
+			Falls ihr bei der Mindmap nicht weiterkommt, könnt ihr den Hilfe-Button drücken. Dieser wird euch die Begriffe vorgeben, die in die Mindmap einzutragen sind. Die Begriffe sind nicht sortiert.
+		</p>
+		<button id="listButton" type="button">Hilfe</button>
+		<div id="hiddenList" hidden>
+			<ul>
+				<li>
+					Memory
+				</li>
+				<li>
+					Output
+				</li>
+				<li>
+					Input
+				</li>
+				<li>
+					CPU
+				</li>
+				<li>
+					GPU
+				</li>
+				<li>
+					Mainboard/Bussystem
+				</li>
+				<li>
+					2x Rechenwerk (Logical Unit)
+				</li>
+				<li>
+					2x Steuerwerk (Control Unit)
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="taskThree">
+		<b>Aufgabe 3:</b>
+		<p>
+			<b>Vergleicht</b> eure Mindmap mit der bereitgestellten Lösung und überprüft, ob eure Antworten mit dem Muster übereinstimmen.
+		</p>
+		<button id="displayButton" type="button">Anzeigen</button>
+		<div class="center">
+			<p id="hiddenImage" hidden>
+			<img src="media/VNA_Diagram_half-filled.svg" alt="Von Neumann Architektur">
+			</p>
+		</div>
+	</div>
+	<div class="pageEnd">
+		Wenn ihr mit dem Kapitel fertig seid, besucht eines der anderen (
+		<a href="cpu.html">CPU</a>, 
+		<a href="gpu.html">GPU</a>, 
+		<a href="memory.html">Speicher</a> oder 
+		<a href="bus.html">Mainboard &#38; Anschlüsse</a>
+		), bis ihr am Ende beim Kapitel Abschluss landet.
+	</div>
+  </body>
+</html>

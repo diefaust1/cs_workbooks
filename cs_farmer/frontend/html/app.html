@@ -1,0 +1,103 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Robot Farmer</title>
+    <link rel="stylesheet" href="../css/app.css" />
+    <script defer src="../script/app.js?v=837ab60570ed"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="./app.html"><span class="brand-icon" aria-hidden="true">⌘</span> Robot Farmer</a>
+    </header>
+    <main>
+      <div class="intro">
+        <p class="eyebrow">A little code. A little cultivation.</p>
+      </div>
+      <div class="workspace">
+        <div class="workspace-column">
+        <section class="panel balance-panel" aria-labelledby="balance-title">
+          <h2 id="balance-title">Balance</h2><span id="balance">0.00</span>
+        </section>
+        <section class="panel editor-panel" aria-labelledby="editor-title">
+          <div class="panel-heading">
+            <h2 id="editor-title"><span class="section-number">01</span> Your code</h2>
+            <span class="panel-meta">EDITOR</span>
+          </div>
+          <div class="editor-body">
+            <label class="sr-only" for="code-editor">Write your farm code</label>
+            <textarea id="code-editor" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="compile-note" placeholder="Insert code here..."></textarea>
+          </div>
+          <div class="editor-footer">
+            <button class="compile-button" id="compile-button" type="button" aria-describedby="compile-note"><span aria-hidden="true">▷</span> Compile</button>
+            <button class="compile-button stop-button" id="stop-button" type="button" disabled>Stop</button>
+          </div>
+        </section>
+          <section class="panel output-panel" aria-labelledby="output-title">
+            <div class="panel-heading">
+              <h2 id="output-title">Output</h2>
+              <span id="execution-status" class="panel-meta" role="status">READY</span>
+            </div>
+            <pre id="output" role="log" aria-label="Program output" aria-live="polite" tabindex="0">Write your commands, then click Compile.</pre>
+          </section>
+        </div>
+        <div class="workspace-column">
+        <section class="panel inventory-panel" aria-labelledby="seeds-title">
+          <div class="panel-heading"><h2 id="seeds-title">Seeds</h2></div>
+          <dl class="inventory-list">
+            <div><dt>Wheat</dt><dd id="seed-wheat" aria-label="Unlimited wheat seeds">∞</dd></div>
+            <div><dt>Tomato</dt><dd id="seed-tomato">0</dd></div>
+            <div><dt>Cucumber</dt><dd id="seed-cucumber">0</dd></div>
+          </dl>
+        </section>
+        <section class="panel inventory-panel" aria-labelledby="harvest-title">
+          <div class="panel-heading"><h2 id="harvest-title">Harvest inventory</h2></div>
+          <dl class="inventory-list">
+            <div><dt>Wheat</dt><dd id="harvest-wheat">0</dd></div>
+            <div><dt>Tomato</dt><dd id="harvest-tomato">0</dd></div>
+            <div><dt>Cucumber</dt><dd id="harvest-cucumber">0</dd></div>
+          </dl>
+        </section>
+        <section class="panel farm-panel" aria-labelledby="farm-title">
+          <div class="panel-heading">
+            <h2 id="farm-title"><span class="section-number">02</span> Your field</h2>
+            <span class="panel-meta">5 × 5</span>
+          </div>
+          <div class="field-stage">
+            <div class="field-frame">
+              <div id="field" role="img" aria-label="Five by five farm field. Selected tile: (0, 0)."></div>
+            </div>
+          </div>
+          <div class="field-footer">
+            <span><span class="status-dot" aria-hidden="true"></span> <span id="position">Position: (0, 0)</span></span>
+            <span class="tile-count">25 TILES</span>
+          </div>
+        </section>
+        <section class="panel commands-panel" aria-labelledby="commands-title">
+          <div class="panel-heading"><h2 id="commands-title">Commands</h2></div>
+          <dl class="command-list">
+            <div><dt><code>move(right)</code></dt><dd>Move one tile: right, left, up, or down. move() defaults to right.</dd></div>
+            <div><dt><code>plant(wheat)</code></dt><dd>Plant wheat, tomato, or cucumber on an empty tile, using one seed. Wheat seeds are unlimited.</dd></div>
+            <div><dt><code>harvest()</code></dt><dd>Collect a grown plant. An immature plant is removed without a reward.</dd></div>
+            <div><dt><code>reset()</code></dt><dd>Return to the upper-left tile, (0, 0).</dd></div>
+            <div><dt><code>while(True):</code></dt><dd>Repeat the indented block until you press Stop.</dd></div>
+            <div><dt><code>while(False):</code></dt><dd>Skip the indented block.</dd></div>
+          </dl>
+          <div class="language-help">
+            <p id="compile-note">One statement per line. Tab inserts four spaces; Shift+Tab removes indentation. Press Escape then Tab to leave the editor. Commands and loop checks each pause for 500 ms.</p>
+            <pre aria-label="Example loop">while(True):
+    plant(wheat)
+    harvest()
+    move()</pre>
+            <p>Blank lines and full-line <code># comments</code> are allowed. Runs continue from the last position. Edge moves stay on the field.</p>
+          </div>
+        </section>
+        </div>
+      </div>
+    </main>
+    <footer class="site-footer"><span>ROBOT FARMER</span></footer>
+  </body>
+</html>
+
+

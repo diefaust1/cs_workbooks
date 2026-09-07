@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en-US">
+  
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+	<meta name="author" content="Eric Faust" />
+    <title>Arbeitsheft: Informatik und Bildung</title>
+	
+	<link rel="stylesheet" href="css/style.css" />
+	<link rel="icon" href="media/28px_Faust.png" type="image/x-icon" />
+	<script defer src="scripts/hideImage.js"></script>
+
+  </head>
+ 
+  <body>
+	<header>
+		Einführung in die Hardwaretechnik
+	</header>
+	<nav>
+		<ul class="nav">
+			<li><a href="index.html">VN-Architektur</a></li>
+			<li><a href="cpu.html">CPU</a></li>
+			<li><a href="gpu.html">GPU</a></li>
+			<li><a href="memory.html">Speicher</a></li>
+			<li><a href="bus.html">Mainboard &#38; Netzteil</a></li>
+			<li><a href="wrup.html">Wrap-Up</a></li>
+		</ul>
+	</nav>
+	<div class="subHeader">
+		Von Neumann Architektur
+	</div>
+	<div class="taskOne">
+		Aufgabe 1: Im Folgenden werden drei verschiedene Szenarien beschrieben. <br>
+		Verwendet eurer Vor- und Alltagswissen, um das Problem zu beschreiben und wie es gelöst werden könnte. (Einzelarbeit)<br>
+		a) Im Browser sind viele Tabs offen und der Computer wird langsamer.<br>
+		b) Ihr könnte eure Bilder nicht vom Handy auf euren Computer übertragen.<br>
+		c) Der Computer wird sehr warm und die Lüfter laut.
+	</div>
+	<div class="taskTwo">
+		Aufgabe 2: Vor euch findet ihr eine Mind-Map zum Thema der Von Neumann Architektur.<br>
+		Schaut euch die folgenden Informationen an und füllt die frei stehenden Boxen aus. Die drei untersten Boxen können freigelassen,
+		werden. Diese werden ersichtlich wenn das Thema des Speichers bearbeitet wurde.<br>
+		<img src="media/VNA_Diagram_blank.svg" alt="Von Neumann Architektur"><br>
+		Das Funktionsprinzip eines Computers wurde vom ungarischen Mathematiker John von Neumann entwickelt. Zwar hat sich die praktische 
+		Ausprägung im Laufe der Zeit und der technischen Weiterentwicklung immer mal wieder verändert. Aber die grundsätzliche Architektur 
+		ist die gleiche geblieben.<br>
+		Die Architektur des Von-Neumann-Rechners besteht aus vier Funktionseinheiten:<br>
+		<ul class="tableVNA">
+			<li>Rechenwerk (Logical Unit)</li>
+			<li>Steuerwerk (Control Unit)</li>
+			<li>Speicherwerk (Memory)</li>
+			<li>Ein-/Ausgabewerk (Input/Output)</li>
+		</ul>
+		Im Von-Neumann-Rechner werden die wichtigsten Einheiten Rechenwerk und Steuerwerk in der eigentlichen Verarbeitungseinheit, 
+		dem Prozessor (Central Prozessing Unit - CPU), vereint. Die CPU übernimmt die Ausführung der Befehle und die Ablaufsteuerung. 
+		Die Befehle werden nacheinander, Schritt für Schritt, ausgeführt. Die Befehle und Daten werden vom Steuerwerk aus dem Speicher 
+		geholt. Da Grafikkarten (Graphic Processing Unit  - GPU) in den 1950er Jahren noch nicht essentiell für Alltags-Computer mit 
+		grafischen Ansprüchen waren, wurden diese nicht speziell in der Von-Neumann-Architektur berücksichtigt. Sie würden in der 
+		Von-Neumann-Weltsicht heutzutage als weiteres Rechenwerk neben der CPU angesehen werden. Die GPU besitzt auch ein Rechen- und 
+		Steuerwerk genau wie die CPU. Die Verbindung zwischen den Prozessoren (CPU und GPU), Speicherwerk und Ein-/Ausgabewerk bezeichnet 
+		man als Bus-System, der im eigentlichen Von-Neumann-Rechner unerwähnt bleibt, aber in der Praxis eine wichtige Rolle spielt. 
+		Im Von-Neumann-Rechner werden alle Instruktionen und Daten über das Bus-System geführt. Hier kann es schnell zu Engpässen kommen, 
+		wenn Daten aus dem Speicher geladen werden und gleichzeitig neue Instruktionen ausgeführt werden müssen, um das Rechenwerk 
+		optimal auszulasten. Man spricht deshalb auch vom "Von-Neumannschen-Flaschenhals". Obwohl der Von-Neumann-Rechner ein sehr 
+		einfaches Modell eines Computers ist, basieren alle modernen Computer auf diesem einfachen Prinzip.
+	</div>
+	<div class="taskThree">
+		Aufgabe 3:<br>
+		Vergleicht eure Mindmap mit der bereitgestellten Lösung und überprüft, ob eure Antworten mit dem Muster übereinstimmen.<br>
+		<button id="displayBnt" type="button">Anzeigen</button><br>
+		<p id="hiddenImage" hidden>
+		<img src="media/VNA_Diagram_half-filled.svg" alt="Von Neumann Architektur">
+		</p>
+	</div>
+  </body>
+
+</html>
