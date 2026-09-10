@@ -4,10 +4,12 @@
 
 ```text
 cs_farmer/
+  package.json             Vite development, build, check, and test commands
+  vite.config.ts           Frontend source and production output paths
   backend/                 Unchanged Deno starter server and tests
   frontend/
     deno.json              Browser and Deno test types
-    html/app.html          Editor, field, balance, inventories, reference
+    index.html             Vite entry: editor, field, inventories, reference
     css/app.css            Layout, tiles, crop and selection styling
     script/app.ts          DOM updates, execution controls, growth display
     script/editor.ts       Tab/Shift+Tab editing and focus escape
@@ -19,34 +21,53 @@ cs_farmer/
     script/program_test.ts Parser, loops, timing, position tests
     script/farm_test.ts    Crops, growth boundaries, seed/inventory tests
     script/language_test.ts If, print, position getters, and field-reset tests
-    script/app_test.ts     Generated bundle integration with a minimal DOM
+    script/app_test.ts     Vite production bundle integration with a minimal DOM
     script/save_test.ts    Save round-trip and invalid-schema tests
-    script/app.js          Generated browser bundle; do not edit directly
+  dist/                    Generated production site; deploy this directory
   doc/                     Overview, language, farming, and development guides
 ```
 
 ## Build and preview
 
-From `cs_farmer`:
+Install dependencies once, then start the Vite development server from `cs_farmer`:
 
 ```powershell
-deno run --allow-env --allow-read --allow-write --allow-run npm:esbuild frontend/script/app.ts --bundle --outfile=frontend/script/app.js
+npm install
+npm run dev
 ```
 
-Add `--watch` to rebuild on TypeScript saves. Open `frontend/html/app.html` in a browser or serve the frontend with a static server. Refresh after changes. The script uses `defer`.
+Open the URL printed by Vite. TypeScript and CSS changes update in the browser automatically.
 
-The HTML script URL includes a static version query to avoid an older cached script. Update that value when publishing a changed bundle; watch mode does not update it automatically. If the page behaves like an older version, hard-refresh and verify the file path.
+Create the production site with:
+
+```powershell
+npm run build
+```
+
+Vite writes `dist/index.html` and content-hashed JavaScript/CSS assets. Deploy the complete `dist` directory, never the `frontend` source directory. To inspect the production build locally, use `npm run preview`.
+
+For Caddy on the current server, serve the build output directly:
+
+```caddy
+farmer.faulab.com {
+    root * /home/ubuntu/server/cs_workbooks/cs_farmer/dist
+    encode zstd gzip
+    file_server
+}
+```
+
+Remove the old redirect to `/html/app.html`; Vite's entry page is `/index.html` and Caddy serves it automatically at `/`. Each build gives changed assets new filenames, preventing an old script from being paired with new HTML or CSS.
 
 ## Verification
 
 From `cs_farmer`:
 
 ```powershell
-deno check --config frontend/deno.json frontend/script/app.ts
-deno test --allow-read=frontend/script/app.js --config frontend/deno.json frontend/script/program_test.ts frontend/script/farm_test.ts frontend/script/language_test.ts frontend/script/save_test.ts frontend/script/app_test.ts
+npm run check
+npm test
 ```
 
-Rebuild before running bundle tests. Tests cover syntax, loops, cancellation, movement, stored facing direction, old-command rejection, plant definitions, seed consumption, occupied tiles, maturity boundaries, premature removal, inventory updates, position persistence, field clearing, conditional execution, quoted strings, and execution-time getters. The bundle test also exercises Compile/Stop, keyboard indentation, and inventory labels. Its minimal DOM substitute does not verify visual layout.
+`npm test` creates a fresh production build before running the Deno tests. Tests cover syntax, loops, cancellation, movement, stored facing direction, old-command rejection, plant definitions, seed consumption, occupied tiles, maturity boundaries, premature removal, inventory updates, position persistence, field clearing, conditional execution, quoted strings, and execution-time getters. The production bundle test also exercises Compile/Stop, keyboard indentation, inventory labels, and the 36-tile grid. Its minimal DOM substitute does not verify visual layout.
 
 For a manual check:
 

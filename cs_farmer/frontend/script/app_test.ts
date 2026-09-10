@@ -1,7 +1,7 @@
 import { strictEqual, match } from "node:assert";
 import { runInNewContext } from "node:vm";
 
-// Exercise the actual browser bundle's Compile listener with a minimal DOM.
+// Exercise the actual Vite production bundle's Compile listener with a minimal DOM.
 // This catches accidental farm recreation in the UI, not just runner regressions.
 Deno.test("Compile preserves position between clicks and resets only on reset()", async () => {
   class Element {
@@ -53,7 +53,11 @@ Deno.test("Compile preserves position between clicks and resets only on reset()"
   element("#code-editor").setAttribute("data-i18n-placeholder", "Insert code here...");
   element("#language-selector").setAttribute("data-i18n-aria-label", "Language");
   const documentElement = { lang: "en" };
-  const bundle = await Deno.readTextFile(new URL("./app.js", import.meta.url));
+  const assetsDirectory = new URL("../../dist/assets/", import.meta.url);
+  const bundleEntry = [...Deno.readDirSync(assetsDirectory)]
+    .find((entry) => entry.isFile && /^index-.*\.js$/.test(entry.name));
+  if (!bundleEntry) throw new Error("Vite JavaScript bundle not found. Run the production build first.");
+  const bundle = await Deno.readTextFile(new URL(bundleEntry.name, assetsDirectory));
   let ticks = 0;
   let stopAtTick = Infinity;
   let now = 0;
