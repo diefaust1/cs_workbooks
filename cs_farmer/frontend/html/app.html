@@ -1,98 +1,131 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Robot Farmer</title>
     <link rel="stylesheet" href="../css/app.css" />
-    <script defer src="../script/app.js?v=837ab60570ed"></script>
+    <script defer src="../script/app.js?v=inventory-prices-1"></script>
   </head>
   <body>
     <header class="site-header">
       <a class="brand" href="./app.html"><span class="brand-icon" aria-hidden="true">⌘</span> Robot Farmer</a>
+      <div class="language-selector">
+        <label class="sr-only" for="language-selector" data-i18n="Language">Language</label>
+        <select id="language-selector" aria-label="Language" data-i18n-aria-label="Language">
+          <option value="en" selected>English</option>
+          <option value="de">Deutsch</option>
+        </select>
+      </div>
     </header>
     <main>
       <div class="intro">
-        <p class="eyebrow">A little code. A little cultivation.</p>
+        <p class="eyebrow" data-i18n="A little code. A little cultivation.">A little code. A little cultivation.</p>
+        <div class="save-controls" aria-label="Save game controls" data-i18n-aria-label="Save game controls">
+          <button class="utility-button" id="save-button" type="button" data-i18n="Save">Save</button>
+          <button class="utility-button" id="load-button" type="button" data-i18n="Load">Load</button>
+          <input class="sr-only" id="load-input" type="file" accept="application/json,.json" />
+        </div>
       </div>
       <div class="workspace">
         <div class="workspace-column">
         <section class="panel balance-panel" aria-labelledby="balance-title">
-          <h2 id="balance-title">Balance</h2><span id="balance">0.00</span>
+          <h2 id="balance-title" data-i18n="Balance">Balance</h2><span id="balance">0.00</span>
         </section>
         <section class="panel editor-panel" aria-labelledby="editor-title">
           <div class="panel-heading">
-            <h2 id="editor-title"><span class="section-number">01</span> Your code</h2>
-            <span class="panel-meta">EDITOR</span>
+            <h2 id="editor-title"><span class="section-number">01</span> <span data-i18n="Your code">Your code</span></h2>
+            <span class="panel-meta" data-i18n="EDITOR">EDITOR</span>
           </div>
           <div class="editor-body">
-            <label class="sr-only" for="code-editor">Write your farm code</label>
-            <textarea id="code-editor" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="compile-note" placeholder="Insert code here..."></textarea>
+            <label class="sr-only" for="code-editor" data-i18n="Write your farm code">Write your farm code</label>
+            <textarea id="code-editor" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="compile-note" placeholder="Insert code here..." data-i18n-placeholder="Insert code here..."></textarea>
           </div>
           <div class="editor-footer">
-            <button class="compile-button" id="compile-button" type="button" aria-describedby="compile-note"><span aria-hidden="true">▷</span> Compile</button>
-            <button class="compile-button stop-button" id="stop-button" type="button" disabled>Stop</button>
+            <button class="compile-button" id="compile-button" type="button" aria-describedby="compile-note"><span aria-hidden="true">▷</span> <span data-i18n="Compile">Compile</span></button>
+            <button class="compile-button stop-button" id="stop-button" type="button" disabled data-i18n="Stop">Stop</button>
           </div>
         </section>
           <section class="panel output-panel" aria-labelledby="output-title">
             <div class="panel-heading">
-              <h2 id="output-title">Output</h2>
+              <h2 id="output-title" data-i18n="Output">Output</h2>
               <span id="execution-status" class="panel-meta" role="status">READY</span>
             </div>
-            <pre id="output" role="log" aria-label="Program output" aria-live="polite" tabindex="0">Write your commands, then click Compile.</pre>
+            <pre id="output" role="log" aria-label="Program output" data-i18n-aria-label="Program output" aria-live="polite" tabindex="0">Write your commands, then click Compile.</pre>
           </section>
+          <details class="panel disclosure-panel shop-panel" aria-labelledby="shop-title">
+            <summary class="panel-heading"><h2 id="shop-title" data-i18n="Shop">Shop</h2></summary>
+            <div class="shop-content">
+              <p><span data-i18n="Current field">Current field</span>: <strong id="shop-field-size">1 × 1</strong></p>
+              <button class="utility-button" id="upgrade-field-button" type="button">Expand to 2 × 2 — 4.00</button>
+            </div>
+          </details>
         </div>
         <div class="workspace-column">
-        <section class="panel inventory-panel" aria-labelledby="seeds-title">
-          <div class="panel-heading"><h2 id="seeds-title">Seeds</h2></div>
-          <dl class="inventory-list">
-            <div><dt>Wheat</dt><dd id="seed-wheat" aria-label="Unlimited wheat seeds">∞</dd></div>
-            <div><dt>Tomato</dt><dd id="seed-tomato">0</dd></div>
-            <div><dt>Cucumber</dt><dd id="seed-cucumber">0</dd></div>
-          </dl>
-        </section>
-        <section class="panel inventory-panel" aria-labelledby="harvest-title">
-          <div class="panel-heading"><h2 id="harvest-title">Harvest inventory</h2></div>
-          <dl class="inventory-list">
-            <div><dt>Wheat</dt><dd id="harvest-wheat">0</dd></div>
-            <div><dt>Tomato</dt><dd id="harvest-tomato">0</dd></div>
-            <div><dt>Cucumber</dt><dd id="harvest-cucumber">0</dd></div>
-          </dl>
-        </section>
         <section class="panel farm-panel" aria-labelledby="farm-title">
           <div class="panel-heading">
-            <h2 id="farm-title"><span class="section-number">02</span> Your field</h2>
-            <span class="panel-meta">5 × 5</span>
+            <h2 id="farm-title"><span class="section-number">02</span> <span data-i18n="Your field">Your field</span></h2>
+            <span class="panel-meta" id="field-size">1 × 1</span>
           </div>
           <div class="field-stage">
             <div class="field-frame">
-              <div id="field" role="img" aria-label="Five by five farm field. Selected tile: (0, 0)."></div>
+              <div id="field" role="img" aria-label="Farm field. Size: 1 × 1. Selected tile: (0, 0). Locked tiles are grey."></div>
             </div>
           </div>
           <div class="field-footer">
             <span><span class="status-dot" aria-hidden="true"></span> <span id="position">Position: (0, 0)</span></span>
-            <span class="tile-count">25 TILES</span>
+            <span class="tile-count" id="tile-count">1 TILE</span>
           </div>
         </section>
-        <section class="panel commands-panel" aria-labelledby="commands-title">
-          <div class="panel-heading"><h2 id="commands-title">Commands</h2></div>
+        <section class="panel inventory-panel" aria-labelledby="seeds-title">
+          <div class="panel-heading"><h2 id="seeds-title" data-i18n="Seeds">Seeds</h2></div>
+          <dl class="inventory-list">
+            <div><dt data-i18n="Wheat">Wheat</dt><dd id="seed-wheat" aria-label="Unlimited wheat seeds" data-i18n-aria-label="Unlimited wheat seeds">∞</dd></div>
+            <div><dt data-i18n="Tomato">Tomato</dt><dd id="seed-tomato">0</dd></div>
+            <div><dt data-i18n="Cucumber">Cucumber</dt><dd id="seed-cucumber">0</dd></div>
+          </dl>
+        </section>
+        <section class="panel inventory-panel" aria-labelledby="harvest-title">
+          <div class="panel-heading"><h2 id="harvest-title" data-i18n="Harvest inventory">Harvest inventory</h2></div>
+          <dl class="inventory-list">
+            <div><dt data-i18n="Wheat">Wheat</dt><dd id="harvest-wheat">0</dd></div>
+            <div><dt data-i18n="Tomato">Tomato</dt><dd id="harvest-tomato">0</dd></div>
+            <div><dt data-i18n="Cucumber">Cucumber</dt><dd id="harvest-cucumber">0</dd></div>
+          </dl>
+        </section>
+        <details class="panel disclosure-panel commands-panel" aria-labelledby="commands-title">
+          <summary class="panel-heading"><h2 id="commands-title" data-i18n="Commands">Commands</h2></summary>
           <dl class="command-list">
-            <div><dt><code>move(right)</code></dt><dd>Move one tile: right, left, up, or down. move() defaults to right.</dd></div>
-            <div><dt><code>plant(wheat)</code></dt><dd>Plant wheat, tomato, or cucumber on an empty tile, using one seed. Wheat seeds are unlimited.</dd></div>
-            <div><dt><code>harvest()</code></dt><dd>Collect a grown plant. An immature plant is removed without a reward.</dd></div>
-            <div><dt><code>reset()</code></dt><dd>Return to the upper-left tile, (0, 0).</dd></div>
-            <div><dt><code>while(True):</code></dt><dd>Repeat the indented block until you press Stop.</dd></div>
-            <div><dt><code>while(False):</code></dt><dd>Skip the indented block.</dd></div>
+            <div><dt><code>direction(right)</code></dt><dd data-i18n="Face up, down, left, or right without moving.">Face up, down, left, or right without moving.</dd></div>
+            <div><dt><code>is_harvestable()</code></dt><dd data-i18n="Return True if the selected tile has a fully grown plant; otherwise False.">Return True if the selected tile has a fully grown plant; otherwise False.</dd></div>
+            <div><dt><code>sell(wheat, 2)</code></dt><dd data-i18n="Sell a whole number of harvested wheat, tomato, or cucumber plants and add their value to your balance.">Sell a whole number of harvested wheat, tomato, or cucumber plants and add their value to your balance.</dd></div>
+            <div><dt><code>move()</code></dt><dd data-i18n="Move one tile in the current direction. Starts facing right. The blue edge shows the facing side.">Move one tile in the current direction. Starts facing right. The blue edge shows the facing side.</dd></div>
+            <div><dt><code>plant(wheat)</code></dt><dd data-i18n="Plant wheat, tomato, or cucumber on an empty tile, using one seed. Wheat seeds are unlimited.">Plant wheat, tomato, or cucumber on an empty tile, using one seed. Wheat seeds are unlimited.</dd></div>
+            <div><dt><code>harvest()</code></dt><dd data-i18n="Collect a grown plant. An immature plant is removed without a reward.">Collect a grown plant. An immature plant is removed without a reward.</dd></div>
+            <div><dt><code>reset()</code></dt><dd data-i18n="Return to the upper-left tile, (0, 0), facing right.">Return to the upper-left tile, (0, 0), facing right.</dd></div>
+            <div><dt><code>reset_field()</code></dt><dd data-i18n="Remove every plant and return to (0, 0), facing right. Inventory and balance stay unchanged.">Remove every plant and return to (0, 0), facing right. Inventory and balance stay unchanged.</dd></div>
+            <div><dt><code>get_position()</code></dt><dd data-i18n="Return the current (x, y) coordinates.">Return the current (x, y) coordinates.</dd></div>
+            <div><dt><code>get_x_cord()</code></dt><dd data-i18n="Return the current x coordinate.">Return the current x coordinate.</dd></div>
+            <div><dt><code>get_y_cord()</code></dt><dd data-i18n="Return the current y coordinate.">Return the current y coordinate.</dd></div>
+            <div><dt><code>get_direction()</code></dt><dd data-i18n="Return the current direction.">Return the current direction.</dd></div>
+            <div><dt><code>get_inventory(wheat)</code></dt><dd data-i18n="Return the harvested inventory count for wheat, tomato, or cucumber.">Return the harvested inventory count for wheat, tomato, or cucumber.</dd></div>
+            <div><dt><code>print("Hello")</code></dt><dd data-i18n="Print a quoted string or value, such as print(get_position()). Single quotes work too.">Print a quoted string or value, such as print(get_position()). Single quotes work too.</dd></div>
+            <div><dt><code>if(True):</code></dt><dd data-i18n="Run the indented block once. if(False): skips it. Numeric comparisons are supported, such as get_x_cord() == 2.">Run the indented block once. if(False): skips it. Numeric comparisons are supported, such as get_x_cord() == 2.</dd></div>
+            <div><dt><code>else:</code></dt><dd data-i18n="Run this indented block when the matching if is false. Align else with its if.">Run this indented block when the matching if is false. Align else with its if.</dd></div>
+            <div><dt><code>while(True):</code></dt><dd data-i18n="Repeat while the condition is true. For example: while(get_x_cord() &lt; 4):">Repeat while the condition is true. For example: while(get_x_cord() &lt; 4):</dd></div>
+            <div><dt><code>while(False):</code></dt><dd data-i18n="Skip the indented block.">Skip the indented block.</dd></div>
+            <div><dt><code>and / &amp;</code></dt><dd data-i18n="Both conditions must be true. Evaluated before or.">Both conditions must be true. Evaluated before or.</dd></div>
+            <div><dt><code>or / |</code></dt><dd data-i18n="At least one condition must be true. Use parentheses to group conditions.">At least one condition must be true. Use parentheses to group conditions.</dd></div>
           </dl>
           <div class="language-help">
-            <p id="compile-note">One statement per line. Tab inserts four spaces; Shift+Tab removes indentation. Press Escape then Tab to leave the editor. Commands and loop checks each pause for 500 ms.</p>
-            <pre aria-label="Example loop">while(True):
+            <p id="compile-note" data-i18n="One statement per line. Tab inserts four spaces; Shift+Tab removes indentation. Press Escape then Tab to leave the editor. Commands and while/if checks each pause for 500 ms.">One statement per line. Tab inserts four spaces; Shift+Tab removes indentation. Press Escape then Tab to leave the editor. Commands and while/if checks each pause for 500 ms.</p>
+            <pre aria-label="Example loop" data-i18n-aria-label="Example loop">while(True):
     plant(wheat)
     harvest()
     move()</pre>
-            <p>Blank lines and full-line <code># comments</code> are allowed. Runs continue from the last position. Edge moves stay on the field.</p>
+            <p data-i18n="Blank lines and full-line # comments are allowed. Runs continue from the last position. Edge moves stay on the field.">Blank lines and full-line # comments are allowed. Runs continue from the last position. Edge moves stay on the field.</p>
           </div>
-        </section>
+        </details>
         </div>
       </div>
     </main>
