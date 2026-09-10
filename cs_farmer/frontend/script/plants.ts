@@ -11,20 +11,20 @@ export abstract class Plant {
 export class Wheat extends Plant {
   readonly name = "wheat";
   readonly seedPrice = 0;
-  readonly growthTime = 0.5;
+  readonly growthTime = 0.6;
   readonly sellingPrice = 0.5;
 }
 export class Tomato extends Plant {
   readonly name = "tomato";
   readonly seedPrice = 0.2;
-  readonly growthTime = 1;
+  readonly growthTime = 2;
   readonly sellingPrice = 2;
 }
 export class Cucumber extends Plant {
   readonly name = "cucumber";
   readonly seedPrice = 0.5;
-  readonly growthTime = 2;
-  readonly sellingPrice = 4;
+  readonly growthTime = 4;
+  readonly sellingPrice = 5;
 }
 export const plantTypes = { wheat: Wheat, tomato: Tomato, cucumber: Cucumber };
 export const plantNames = Object.keys(plantTypes) as PlantName[];
