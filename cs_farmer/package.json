@@ -1,0 +1,15 @@
+{
+  "name": "cs-farmer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "deno check --config frontend/deno.json frontend/script/app.ts",
+    "test": "npm run build && deno test --allow-read=dist --config frontend/deno.json frontend/script/program_test.ts frontend/script/farm_test.ts frontend/script/language_test.ts frontend/script/save_test.ts frontend/script/i18n_test.ts frontend/script/app_test.ts"
+  },
+  "devDependencies": {
+    "vite": "^8.3.0"
+  }
+}
