@@ -60,6 +60,20 @@
               <button class="utility-button" id="upgrade-field-button" type="button">Expand to 2 × 2 — 4.00</button>
             </div>
           </details>
+          <details class="panel disclosure-panel plant-info-panel" aria-labelledby="plant-info-title">
+            <summary class="panel-heading"><h2 id="plant-info-title" data-i18n="Plants">Plants</h2></summary>
+            <div class="plant-table-wrapper">
+              <table class="plant-table">
+                <thead><tr><th data-i18n="Plant">Plant</th><th data-i18n="Seed price">Seed price</th><th data-i18n="Growth time">Growth time</th><th data-i18n="Wither chance">Wither chance</th><th data-i18n="Selling price">Selling price</th></tr></thead>
+                <tbody>
+                  <tr><th data-i18n="Wheat">Wheat</th><td>0.00</td><td>0.6 s</td><td>0%</td><td>0.50</td></tr>
+                  <tr><th data-i18n="Tomato">Tomato</th><td>0.20</td><td>2 s</td><td>5%</td><td>2.00</td></tr>
+                  <tr><th data-i18n="Cucumber">Cucumber</th><td>0.50</td><td>4 s</td><td>5%</td><td>5.00</td></tr>
+                  <tr><th data-i18n="Watermelon">Watermelon</th><td>2.00</td><td>10 s</td><td>10%</td><td>8.00</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
         </div>
         <div class="workspace-column">
         <section class="panel farm-panel" aria-labelledby="farm-title">
@@ -83,6 +97,7 @@
             <div><dt data-i18n="Wheat">Wheat</dt><dd id="seed-wheat" aria-label="Unlimited wheat seeds" data-i18n-aria-label="Unlimited wheat seeds">∞</dd></div>
             <div><dt data-i18n="Tomato">Tomato</dt><dd id="seed-tomato">0</dd></div>
             <div><dt data-i18n="Cucumber">Cucumber</dt><dd id="seed-cucumber">0</dd></div>
+            <div><dt data-i18n="Watermelon">Watermelon</dt><dd id="seed-watermelon">0</dd></div>
           </dl>
         </section>
         <section class="panel inventory-panel" aria-labelledby="harvest-title">
@@ -91,6 +106,7 @@
             <div><dt data-i18n="Wheat">Wheat</dt><dd id="harvest-wheat">0</dd></div>
             <div><dt data-i18n="Tomato">Tomato</dt><dd id="harvest-tomato">0</dd></div>
             <div><dt data-i18n="Cucumber">Cucumber</dt><dd id="harvest-cucumber">0</dd></div>
+            <div><dt data-i18n="Watermelon">Watermelon</dt><dd id="harvest-watermelon">0</dd></div>
           </dl>
         </section>
         <details class="panel disclosure-panel commands-panel" aria-labelledby="commands-title">
@@ -98,17 +114,18 @@
           <dl class="command-list">
             <div><dt><code>direction(right)</code></dt><dd data-i18n="Face up, down, left, or right without moving.">Face up, down, left, or right without moving.</dd></div>
             <div><dt><code>is_harvestable()</code></dt><dd data-i18n="Return True if the selected tile has a fully grown plant; otherwise False.">Return True if the selected tile has a fully grown plant; otherwise False.</dd></div>
-            <div><dt><code>sell(wheat, 2)</code></dt><dd data-i18n="Sell a whole number of harvested wheat, tomato, or cucumber plants and add their value to your balance.">Sell a whole number of harvested wheat, tomato, or cucumber plants and add their value to your balance.</dd></div>
+            <div><dt><code>buy(tomato, 2)</code></dt><dd data-i18n="Buy a whole number of wheat, tomato, cucumber, or watermelon seeds using your balance.">Buy a whole number of wheat, tomato, cucumber, or watermelon seeds using your balance.</dd></div>
+            <div><dt><code>sell(wheat, 2)</code></dt><dd data-i18n="Sell a whole number of harvested wheat, tomato, cucumber, or watermelon plants and add their value to your balance.">Sell a whole number of harvested wheat, tomato, cucumber, or watermelon plants and add their value to your balance.</dd></div>
             <div><dt><code>move()</code></dt><dd data-i18n="Move one tile in the current direction. Starts facing right. The blue edge shows the facing side.">Move one tile in the current direction. Starts facing right. The blue edge shows the facing side.</dd></div>
-            <div><dt><code>plant(wheat)</code></dt><dd data-i18n="Plant wheat, tomato, or cucumber on an empty tile, using one seed. Wheat seeds are unlimited.">Plant wheat, tomato, or cucumber on an empty tile, using one seed. Wheat seeds are unlimited.</dd></div>
-            <div><dt><code>harvest()</code></dt><dd data-i18n="Collect a grown plant. An immature plant is removed without a reward.">Collect a grown plant. An immature plant is removed without a reward.</dd></div>
+            <div><dt><code>plant(wheat)</code></dt><dd data-i18n="Plant wheat, tomato, cucumber, or watermelon on an empty tile, using one seed. Wheat seeds are unlimited.">Plant wheat, tomato, cucumber, or watermelon on an empty tile, using one seed. Wheat seeds are unlimited.</dd></div>
+            <div><dt><code>harvest()</code></dt><dd data-i18n="Collect a grown healthy plant. Immature and withered plants are removed without a reward. Healthy watermelon squares gain a yield multiplier.">Collect a grown healthy plant. Immature and withered plants are removed without a reward. Healthy watermelon squares gain a yield multiplier.</dd></div>
             <div><dt><code>reset()</code></dt><dd data-i18n="Return to the upper-left tile, (0, 0), facing right.">Return to the upper-left tile, (0, 0), facing right.</dd></div>
             <div><dt><code>reset_field()</code></dt><dd data-i18n="Remove every plant and return to (0, 0), facing right. Inventory and balance stay unchanged.">Remove every plant and return to (0, 0), facing right. Inventory and balance stay unchanged.</dd></div>
             <div><dt><code>get_position()</code></dt><dd data-i18n="Return the current (x, y) coordinates.">Return the current (x, y) coordinates.</dd></div>
             <div><dt><code>get_x_cord()</code></dt><dd data-i18n="Return the current x coordinate.">Return the current x coordinate.</dd></div>
             <div><dt><code>get_y_cord()</code></dt><dd data-i18n="Return the current y coordinate.">Return the current y coordinate.</dd></div>
             <div><dt><code>get_direction()</code></dt><dd data-i18n="Return the current direction.">Return the current direction.</dd></div>
-            <div><dt><code>get_inventory(wheat)</code></dt><dd data-i18n="Return the harvested inventory count for wheat, tomato, or cucumber.">Return the harvested inventory count for wheat, tomato, or cucumber.</dd></div>
+            <div><dt><code>get_inventory(wheat)</code></dt><dd data-i18n="Return the harvested inventory count for wheat, tomato, cucumber, or watermelon.">Return the harvested inventory count for wheat, tomato, cucumber, or watermelon.</dd></div>
             <div><dt><code>print("Hello")</code></dt><dd data-i18n="Print a quoted string or value, such as print(get_position()). Single quotes work too.">Print a quoted string or value, such as print(get_position()). Single quotes work too.</dd></div>
             <div><dt><code>if(True):</code></dt><dd data-i18n="Run the indented block once. if(False): skips it. Numeric comparisons are supported, such as get_x_cord() == 2.">Run the indented block once. if(False): skips it. Numeric comparisons are supported, such as get_x_cord() == 2.</dd></div>
             <div><dt><code>else:</code></dt><dd data-i18n="Run this indented block when the matching if is false. Align else with its if.">Run this indented block when the matching if is false. Align else with its if.</dd></div>

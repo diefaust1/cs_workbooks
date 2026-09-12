@@ -16,12 +16,13 @@ Write one statement per line. Direction and plant arguments are lowercase names 
 | `get_x_cord()` | Return the current x coordinate. |
 | `get_y_cord()` | Return the current y coordinate. |
 | `get_direction()` | Return `up`, `down`, `left`, or `right` for the current facing direction. |
-| `get_inventory(wheat)` | Return the harvested inventory count for wheat. Also accepts `tomato` or `cucumber`. |
+| `get_inventory(wheat)` | Return the harvested inventory count. Also accepts `tomato`, `cucumber`, or `watermelon`. |
 | `print("Hello")` | Print a quoted message or a value such as `get_position()`. |
-| `plant(wheat)` | Plant on the selected empty tile. Also accepts `tomato` or `cucumber`. Requires a seed. |
+| `buy(tomato, 2)` | Buy two tomato seeds using balance. Accepts every plant type. |
+| `plant(wheat)` | Plant on the selected empty tile. Also accepts `tomato`, `cucumber`, or `watermelon`. Requires a seed. |
 | `is_harvestable()` | Return True for a mature plant on the selected tile, otherwise False. |
-| `sell(wheat, 2)` | Sell two harvested wheat plants and credit balance. Also accepts tomato or cucumber. |
-| `harvest()` | Remove the selected plant; add it to harvest inventory only if fully grown. |
+| `sell(wheat, 2)` | Sell two harvested plants and credit balance. Accepts every plant type. |
+| `harvest()` | Remove the selected plant; healthy mature watermelons use square yield multipliers. |
 
 The old `right()`, `left()`, `up()`, and `down()` commands have been replaced and are rejected. A blocked edge move stays in place and continues execution. Missing seeds, occupied tiles, and empty harvests print a message and continue without consuming inventory.
 
@@ -125,7 +126,7 @@ Loop checks yield even in true loops containing only false loops. Infinite loops
 
 `move()` and `move( )` take no arguments. Set facing with `direction(up)`, `direction(down)`, `direction(left)`, or `direction(right)`. The old argument-taking movement form is rejected.
 
-## Harvestability and sales
+## Harvestability, purchases, and sales
 
 ```python
 plant(wheat)
@@ -138,6 +139,10 @@ print(is_harvestable())
 Use the boolean directly in if/while conditions or combine it with `and`/`&` and `or`/`|`. It is not a numeric comparison operand. `print(is_harvestable())` displays True or False.
 
 `sell(type, quantity)` requires two comma-separated arguments. Quantity must be a non-negative whole-number literal; zero is a no-op. A sale requires enough harvested plants. It never partially sells an order. Invalid syntax rejects the entire program, while insufficient stock logs a message and continues. See [Farming](farming.md) for prices and inventory rules.
+
+`buy(type, quantity)` uses the same argument rules and requires enough balance for the complete purchase. It never partially buys an order. The accepted plant names for buying, planting, selling, and inventory checks are `wheat`, `tomato`, `cucumber`, and `watermelon`.
+
+A mature withered plant still makes `is_harvestable()` return True because `harvest()` must remove it, but it produces no inventory. Healthy watermelon squares from 2x2 through 6x6 are harvested as one group when any part is selected; see [Farming](farming.md) for their yield multipliers.
 
 ## German interface
 

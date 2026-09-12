@@ -71,11 +71,11 @@ npm test
 
 For a manual check:
 
-1. Verify balance 0.00, unlimited wheat seeds, zero other seeds, and zero harvested plants.
+1. Verify balance 0.00, unlimited wheat seeds, zero tomato/cucumber/watermelon seeds, and zero harvested plants.
 2. Confirm the field starts at 1x1 and `move()` remains at (0, 0).
 3. Compile `plant(wheat)` and watch the seedling mature after 0.6 seconds even after execution completes.
 4. Compile `harvest()`; the tile clears and wheat harvest increases by one. Balance stays zero.
-5. Compile `plant(tomato)`; it reports missing seeds without changing state.
+5. Earn balance, compile `buy(tomato, 1)`, and then confirm `plant(tomato)` consumes that seed.
 6. Compile a valid command followed by `right()`; the whole program should be rejected because old movement syntax is no longer supported.
 7. Run the farming loop from the reference, then Stop. Check that state remains and another run can continue.
 8. Earn 4.00, buy the 2x2 expansion in Shop, and confirm movement can reach the new tiles.
@@ -85,13 +85,13 @@ For a manual check:
 
 The parser validates the whole source into statements before execution. The runner walks statements with an explicit stack and waits 500 ms before commands and while/if checks. If advances its parent once before entering its body; while revisits its condition after its body. Conditions accept True/False, numeric comparisons, and grouped AND/OR expressions with short-circuit evaluation. The parser validates both operands; the runner evaluates getters against current farm state on every check. It supports cancellation and never evaluates player code as JavaScript.
 
-Farm tiles use `tiles[y][x]`, each holding coordinates and an optional Plant. A farm starts with one active tile; each successful expansion appends one active column and one active row through the 6x6 maximum. The UI always renders 36 tile elements and marks coordinates outside the active square as locked. Expansion cost is `4 ** currentSize`. Seed and harvest inventories are keyed by plant name and can be read through `get_inventory(type)`. Growth uses `performance.now()` timestamps, with an injectable clock for deterministic tests. A 100 ms display refresh updates maturity without modifying growth state. Runtime action failures are logged and execution continues.
+Farm tiles use `tiles[y][x]`, each holding coordinates and an optional Plant. A farm starts with one active tile; each successful expansion appends one active column and one active row through the 6x6 maximum. The UI always renders 36 tile elements and marks coordinates outside the active square as locked. Expansion cost is `4 ** currentSize`. Seed and harvest inventories are keyed by plant name and can be read through `get_inventory(type)`. Growth uses `performance.now()` timestamps, with an injectable clock for deterministic tests. A 100 ms display refresh resolves one-time wither rolls at maturity and updates the display. Runtime action failures are logged and execution continues.
 
-The app preserves its farm object between runs, caps output at 200 lines, and prints player text using `textContent`. `reset()` resets position and facing to (0, 0) and right, preserving crops and inventory. Position getters return numeric values or a copied coordinate pair. The expression module parses a small allowlist of literal/getter forms without eval. Print uses a dedicated output value, while ordinary actions retain diagnostic messages. Field reset removes crops without changing inventories or balance. Selling harvested produce is supported; buying, automatic persistence storage, and backend integration are not included.
+The app preserves its farm object between runs, caps output at 200 lines, and prints player text using `textContent`. `reset()` resets position and facing to (0, 0) and right, preserving crops and inventory. Position getters return numeric values or a copied coordinate pair. The expression module parses a small allowlist of literal/getter forms without eval. Print uses a dedicated output value, while ordinary actions retain diagnostic messages. Field reset removes crops without changing inventories or balance. Buying and selling validate whole transactions before mutating cents-based balance and inventory.
 
 ## Save files and shop
 
-`save.ts` maps the live class-based farm into a versioned JSON data shape. Version 2 stores the field size along with cents as an integer, encodes unlimited wheat as `"unlimited"`, and emits only occupied crop coordinates. Version-1 saves migrate as 5x5 fields. Loading validates the format marker, version, size, bounds, enums, inventories, crop types, unique tiles, and editor code before returning a replacement farm. Plants are constructed through `plantTypes` with the current monotonic time, so all loaded crops restart their growth.
+`save.ts` maps the live class-based farm into a versioned JSON data shape. Version 3 stores the field size, cents as an integer, watermelon inventories, and every plant's permanent wither state; unlimited wheat remains `"unlimited"`. Version-1 saves migrate as 5x5 fields, while versions 1 and 2 receive zero watermelon inventory and pending wither outcomes. Loading validates the format marker, version, size, bounds, enums, inventories, crop types, wither states, unique tiles, and editor code before returning a replacement farm. Plants restart their growth after loading, but resolved wither outcomes do not reroll.
 
 The Save button creates an `application/json` browser download. Load uses a hidden JSON file input and applies parsed state only after successful validation. Both controls are unavailable while code executes. The collapsible Shop below Output shows the current size and purchases the next expansion from the live balance.
 
@@ -113,7 +113,7 @@ From `cs_farmer/backend`, use `deno task dev` to start it and `deno test` to run
 
 After expanding to at least 5x5, run `while(get_x_cord() < 4):` with an indented `move()` from (0, 0). It should stop at (4, 0). Verify that `direction()` rejects the entire program. Tests cover all six operators, numeric type validation, getter-to-getter comparison, and loop exit behavior.
 
-The command reference uses native `details`/`summary`, collapsed by default. The summary supplies mouse and keyboard toggling; CSS rotates the arrow to reflect the open state. No JavaScript click handler is needed. Check that collapsing hides the reference and expanding restores it.
+The command reference, shop, and plant-information panel use native `details`/`summary` and are collapsed by default. Their summaries supply mouse and keyboard toggling; CSS rotates each arrow to reflect the open state. No JavaScript click handler is needed. Check that collapsing hides each panel's contents and expanding restores them.
 
 ## Logical operators and branches
 
@@ -123,11 +123,11 @@ Else bodies attach to the preceding if statement at the same indentation. The ru
 
 Regression tests cover word/symbol truth tables, grouping, precedence, short-circuiting, nested else binding, malformed branch placement, and combined conditions in live-state loops. For a browser check, run the if/else example from the language guide at (0, 0), then move and run it again to see the opposite branch.
 
-## Harvestability and sale verification
+## Harvestability, withering, purchase, and sale verification
 
-Harvestability receives the runner's clock for deterministic maturity checks. Conditions and getter output read the same execution-time clock; numeric comparisons continue to accept only numeric getters. Sale validation occurs before inventory/balance mutation, and money is rounded to cents.
+Harvestability receives the runner's clock for deterministic maturity checks and resolves a mature plant's wither state once. Conditions and getter output read the same execution-time clock; numeric comparisons continue to accept only numeric getters. Purchase and sale validation occurs before inventory/balance mutation, and money is rounded to cents. Watermelon harvesting searches from the largest square down for a mature healthy square containing the selected tile.
 
-Tests cover empty/immature/mature tiles, exact growth boundaries, selection changes, logical conditions, loop rechecks, each crop's selling price, insufficient stock, invalid quantities, zero sales, and UI balance/inventory updates.
+Tests cover empty/immature/mature/withered tiles, exact growth boundaries, permanent one-time rolls, watermelon multipliers, selection changes, logical conditions, loop rechecks, seed purchases, each crop's current selling price, insufficient funds/stock, invalid quantities, zero-value transactions, save migration, and UI balance/inventory updates.
 
 For a manual check, verify Commands starts collapsed, then compile `plant(wheat)`, `harvest()`, and `sell(wheat, 1)` on separate lines. Balance should increase by 0.50 and wheat harvest should return to its previous count. Try selling unavailable tomato harvest and confirm the balance remains unchanged.
 

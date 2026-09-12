@@ -11,12 +11,13 @@ Robot Farmer (`cs_farmer`) is a browser-based farming and programming game inspi
 - Tab indentation and Shift+Tab outdentation; Escape then Tab leaves the editor.
 - A numeric balance above the editor, initialized to `0.00`.
 - Seed and harvest inventories below the field, with harvest inventory below seeds.
-- Unlimited free wheat seeds; tomato and cucumber seeds start at zero. All harvested counts start at zero.
-- Extendable plant classes for wheat, tomato, and cucumber, each defining seed price, growth time, and selling price.
+- Unlimited free wheat seeds; tomato, cucumber, and watermelon seeds start at zero. Seeds can be purchased with `buy(type, quantity)`.
+- Extendable plant classes for wheat, tomato, cucumber, and watermelon, each defining seed price, growth time, wither chance, and selling price.
+- One-time permanent withering outcomes, plus multiplied harvest yields for healthy 2x2 through 6x6 watermelon squares.
 - Sequential commands and loop checks with 500 ms pauses, whole-program validation, and an output log capped at 200 lines.
 - Position, crops, balance, and inventory preserved between runs in the current page session.
 - JSON save and load controls preserve the complete farm state and editor code across page reloads or devices.
-- A collapsible shop below the output panel for purchasing field expansions with earned balance.
+- Collapsible shop and plant-information panels for field expansions, prices, growth times, and wither chances.
 
 ## Documentation
 
@@ -28,7 +29,7 @@ Robot Farmer (`cs_farmer`) is a browser-based farming and programming game inspi
 
 ## Current scope
 
-Selling is supported through `sell(type, quantity)`, using each plant's selling price. Buying seeds is not implemented yet, so tomato and cucumber seeds still cannot be acquired through the interface. Harvesting stores produce; selling removes it and credits the balance.
+Seeds are purchased through `buy(type, quantity)` and harvested produce is sold through `sell(type, quantity)`. Both operations validate the complete transaction before changing balance or inventory.
 
 Variables, arithmetic, user-defined functions, automatic persistence, and backend integration are not implemented. Manual JSON save files can be downloaded and loaded; the Deno backend remains unchanged and the game runs entirely in the frontend.
 
@@ -36,7 +37,7 @@ Variables, arithmetic, user-defined functions, automatic persistence, and backen
 
 Use **Save** above the field to download `robot-farmer-save.json`. The file contains the balance, field size, position, facing direction, seed and harvest inventories, occupied crop tiles, and editor code. Money is stored as integer cents, unlimited wheat is represented by `"unlimited"`, and the format includes a version number.
 
-Use **Load** to select a JSON save. The complete file is validated before the current game is replaced. Invalid, unsupported, or malformed saves leave the existing game unchanged. Loaded crops restart as newly planted seedlings; crop maturity is intentionally not saved yet.
+Use **Load** to select a JSON save. The complete file is validated before the current game is replaced. Invalid, unsupported, or malformed saves leave the existing game unchanged. Loaded crops restart as newly planted seedlings; crop maturity is intentionally not saved yet. Version-3 saves preserve resolved healthy/withered outcomes so they cannot reroll.
 
 The command reference is collapsed initially; click its header or use Enter/Space while focused to collapse or expand it. The arrow shows its state.
 
