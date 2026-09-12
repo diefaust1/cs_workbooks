@@ -1,18 +1,46 @@
-import { createFarm, move, plant, harvest, sell, resetField, type Farm, type Position, type Direction } from "./farm.ts";
+import {
+  buy,
+  createFarm,
+  type Direction,
+  type Farm,
+  harvest,
+  move,
+  plant,
+  type Position,
+  resetField,
+  sell,
+} from "./farm.ts";
 import { type PlantName } from "./plants.ts";
-import { parseExpression, evaluateExpression, formatValue, parseCondition, evaluateCondition, type Condition, type Expression, type Getter } from "./expressions.ts";
+import {
+  type Condition,
+  evaluateCondition,
+  evaluateExpression,
+  type Expression,
+  formatValue,
+  type Getter,
+  parseCondition,
+  parseExpression,
+} from "./expressions.ts";
 export { createFarm, move };
 export type { Farm, Position };
 export const STEP_DELAY_MS = 500;
-export type Instruction = (
-  | { command: "direction"; argument: Direction }
-  | { command: "plant"; argument: PlantName }
-  | { command: "sell"; argument: PlantName; quantity: number }
-  | { command: "get_inventory"; argument: PlantName }
-  | { command: "move" | "harvest" | "reset" | "reset_field" | Getter }
-  | { command: "print"; expression: Expression }
-) & { line: number };
-export type Statement = Instruction | { kind: "while" | "if"; condition: Condition; body: Statement[]; line: number; elseBody?: Statement[] };
+export type Instruction =
+  & (
+    | { command: "direction"; argument: Direction }
+    | { command: "plant"; argument: PlantName }
+    | { command: "buy" | "sell"; argument: PlantName; quantity: number }
+    | { command: "get_inventory"; argument: PlantName }
+    | { command: "move" | "harvest" | "reset" | "reset_field" | Getter }
+    | { command: "print"; expression: Expression }
+  )
+  & { line: number };
+export type Statement = Instruction | {
+  kind: "while" | "if";
+  condition: Condition;
+  body: Statement[];
+  line: number;
+  elseBody?: Statement[];
+};
 export type Diagnostic = { line: number; source: string; message?: string };
 export type Compilation =
   | { ok: true; instructions: Statement[] }
@@ -22,13 +50,21 @@ export type Compilation =
 export function compileProgram(source: string): Compilation {
   const instructions: Statement[] = [];
   const errors: Diagnostic[] = [];
-  const blocks: { body: Statement[]; owner?: { line: number; source: string } }[] = [{ body: instructions }];
-  let pending: { kind: "while" | "if" | "else"; body: Statement[]; owner: { line: number; source: string } } | undefined;
+  const blocks: {
+    body: Statement[];
+    owner?: { line: number; source: string };
+  }[] = [{ body: instructions }];
+  let pending: {
+    kind: "while" | "if" | "else";
+    body: Statement[];
+    owner: { line: number; source: string };
+  } | undefined;
 
   source.split(/\r?\n/).forEach((sourceLine, index) => {
     const line = sourceLine.trim();
     if (!line || line.startsWith("#")) return;
-    const error = (message: string) => errors.push({ line: index + 1, source: sourceLine, message });
+    const error = (message: string) =>
+      errors.push({ line: index + 1, source: sourceLine, message });
     const whitespace = sourceLine.match(/^\s*/)?.[0] ?? "";
     if (/[^ ]/.test(whitespace) || whitespace.length % 4 !== 0) {
       error("Use four spaces per indentation level; tabs are not supported.");
@@ -37,61 +73,141 @@ export function compileProgram(source: string): Compilation {
     const depth = whitespace.length / 4;
     if (pending) {
       if (depth === blocks.length) blocks.push(pending);
-      else errors.push({ ...pending.owner, message: `Expected ${pending.kind === "while" ? "a loop" : pending.kind === "if" ? "an if" : "an else"} body indented by four spaces.` });
+      else {errors.push({
+          ...pending.owner,
+          message: `Expected ${
+            pending.kind === "while"
+              ? "a loop"
+              : pending.kind === "if"
+              ? "an if"
+              : "an else"
+          } body indented by four spaces.`,
+        });}
       pending = undefined;
     }
     if (depth >= blocks.length) {
-      error("Unexpected indentation. Only a while, if, or else block introduces an indented body.");
+      error(
+        "Unexpected indentation. Only a while, if, or else block introduces an indented body.",
+      );
       return;
     }
     blocks.length = depth + 1;
     const body = blocks[depth].body;
     if (/^else\s*:$/.test(line)) {
       const previous = body[body.length - 1];
-      if (!previous || "command" in previous || previous.kind !== "if" || previous.elseBody) {
-        error("else must follow an if block at the same indentation, with only one else per if.");
+      if (
+        !previous || "command" in previous || previous.kind !== "if" ||
+        previous.elseBody
+      ) {
+        error(
+          "else must follow an if block at the same indentation, with only one else per if.",
+        );
         return;
       }
       previous.elseBody = [];
-      pending = { kind: "else", body: previous.elseBody, owner: { line: index + 1, source: sourceLine } };
+      pending = {
+        kind: "else",
+        body: previous.elseBody,
+        owner: { line: index + 1, source: sourceLine },
+      };
       return;
     }
     const movement = /^direction\(\s*(up|down|left|right)\s*\)$/.exec(line);
-    const sale = /^sell\(\s*(wheat|tomato|cucumber)\s*,\s*(\d+)\s*\)$/.exec(line);
-    const planting = /^plant\(\s*(wheat|tomato|cucumber)\s*\)$/.exec(line);
-    const inventoryGetter = /^get_inventory\(\s*(wheat|tomato|cucumber)\s*\)$/.exec(line);
-    const command = /^(move|harvest|reset|reset_field|get_position|get_x_cord|get_y_cord|get_direction|is_harvestable)\(\s*\)$/.exec(line);
+    const transaction =
+      /^(buy|sell)\(\s*(wheat|tomato|cucumber|watermelon)\s*,\s*(\d+)\s*\)$/
+        .exec(line);
+    const planting = /^plant\(\s*(wheat|tomato|cucumber|watermelon)\s*\)$/.exec(
+      line,
+    );
+    const inventoryGetter =
+      /^get_inventory\(\s*(wheat|tomato|cucumber|watermelon)\s*\)$/.exec(line);
+    const command =
+      /^(move|harvest|reset|reset_field|get_position|get_x_cord|get_y_cord|get_direction|is_harvestable)\(\s*\)$/
+        .exec(line);
     const block = /^(while|if)\s*\((.*)\)\s*:$/.exec(line);
     const condition = block ? parseCondition(block[2]) : undefined;
     const printing = /^print\((.*)\)$/.exec(line);
     const expression = printing ? parseExpression(printing[1]) : undefined;
     if (movement) {
-      body.push({ command: "direction", argument: movement[1] as Direction, line: index + 1 });
-    } else if (sale && Number.isSafeInteger(Number(sale[2]))) {
-      body.push({ command: "sell", argument: sale[1] as PlantName, quantity: Number(sale[2]), line: index + 1 });
+      body.push({
+        command: "direction",
+        argument: movement[1] as Direction,
+        line: index + 1,
+      });
+    } else if (transaction && Number.isSafeInteger(Number(transaction[3]))) {
+      body.push({
+        command: transaction[1] as "buy" | "sell",
+        argument: transaction[2] as PlantName,
+        quantity: Number(transaction[3]),
+        line: index + 1,
+      });
     } else if (planting) {
-      body.push({ command: "plant", argument: planting[1] as PlantName, line: index + 1 });
+      body.push({
+        command: "plant",
+        argument: planting[1] as PlantName,
+        line: index + 1,
+      });
     } else if (inventoryGetter) {
-      body.push({ command: "get_inventory", argument: inventoryGetter[1] as PlantName, line: index + 1 });
+      body.push({
+        command: "get_inventory",
+        argument: inventoryGetter[1] as PlantName,
+        line: index + 1,
+      });
     } else if (command) {
-      body.push({ command: command[1] as "move" | "harvest" | "reset" | "reset_field" | Getter, line: index + 1 });
+      body.push({
+        command: command[1] as
+          | "move"
+          | "harvest"
+          | "reset"
+          | "reset_field"
+          | Getter,
+        line: index + 1,
+      });
     } else if (printing && expression) {
       body.push({ command: "print", expression, line: index + 1 });
     } else if (block && condition !== undefined) {
-      const statement = { kind: block[1] as "while" | "if", condition, body: [] as Statement[], line: index + 1 };
+      const statement = {
+        kind: block[1] as "while" | "if",
+        condition,
+        body: [] as Statement[],
+        line: index + 1,
+      };
       body.push(statement);
-      pending = { kind: statement.kind, body: statement.body, owner: { line: index + 1, source: sourceLine } };
+      pending = {
+        kind: statement.kind,
+        body: statement.body,
+        owner: { line: index + 1, source: sourceLine },
+      };
     } else {
       errors.push({ line: index + 1, source: sourceLine });
     }
   });
-  if (pending) errors.push({ ...pending.owner, message: `Expected ${pending.kind === "while" ? "a loop" : pending.kind === "if" ? "an if" : "an else"} body indented by four spaces.` });
+  if (pending) {
+    errors.push({
+      ...pending.owner,
+      message: `Expected ${
+        pending.kind === "while"
+          ? "a loop"
+          : pending.kind === "if"
+          ? "an if"
+          : "an else"
+      } body indented by four spaces.`,
+    });
+  }
   return errors.length ? { ok: false, errors } : { ok: true, instructions };
 }
 
-export type Step = { instruction: Instruction; position: Position; moved: boolean; message: string; success: boolean; output?: string };
+export type Step = {
+  instruction: Instruction;
+  position: Position;
+  moved: boolean;
+  message: string;
+  success: boolean;
+  output?: string;
+};
 type Pause = (milliseconds: number) => Promise<void>;
-const pause: Pause = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
+const pause: Pause = (milliseconds) =>
+  new Promise((resolve) => setTimeout(resolve, milliseconds));
 
 // An explicit stack avoids recursion and never expands infinite loops in memory.
 // Loop checks also pause, so a true loop containing only false loops can be stopped.
@@ -117,7 +233,10 @@ export async function runProgram(
     if ("command" in statement) {
       frame.index++;
       let moved = false;
-      let result: { success: boolean; message: string; output?: string } = { success: true, message: "" };
+      let result: { success: boolean; message: string; output?: string } = {
+        success: true,
+        message: "",
+      };
       if (statement.command === "move") {
         moved = move(farm);
         result.message = moved ? "Moved." : "Edge reached; staying here.";
@@ -131,9 +250,13 @@ export async function runProgram(
       } else if (statement.command === "reset_field") {
         resetField(farm);
         result.message = "Field cleared. Position reset to (0, 0).";
-      } else if (statement.command === "plant") result = plant(farm, statement.argument, now());
-      else if (statement.command === "sell") result = sell(farm, statement.argument, statement.quantity);
-      else if (statement.command === "harvest") result = harvest(farm, now());
+      } else if (statement.command === "plant") {
+        result = plant(farm, statement.argument, now());
+      } else if (statement.command === "buy") {
+        result = buy(farm, statement.argument, statement.quantity);
+      } else if (statement.command === "sell") {
+        result = sell(farm, statement.argument, statement.quantity);
+      } else if (statement.command === "harvest") result = harvest(farm, now());
       else {
         const expression: Expression = statement.command === "print"
           ? statement.expression
@@ -141,9 +264,18 @@ export async function runProgram(
           ? { kind: "inventory", plant: statement.argument }
           : { kind: "getter", name: statement.command };
         const value = formatValue(evaluateExpression(expression, farm, now()));
-        result = { success: true, message: value, ...(statement.command === "print" ? { output: value } : {}) };
+        result = {
+          success: true,
+          message: value,
+          ...(statement.command === "print" ? { output: value } : {}),
+        };
       }
-      onStep({ instruction: statement, position: { ...farm.position }, moved, ...result });
+      onStep({
+        instruction: statement,
+        position: { ...farm.position },
+        moved,
+        ...result,
+      });
     } else if (evaluateCondition(statement.condition, farm, now())) {
       // If runs once; while stays on the parent statement and rechecks.
       if (statement.kind === "if") frame.index++;
@@ -157,4 +289,3 @@ export async function runProgram(
   }
   return "complete";
 }
-

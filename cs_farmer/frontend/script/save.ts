@@ -6,12 +6,22 @@ import {
   type Inventory,
   MAX_FIELD_SIZE,
 } from "./farm.ts";
-import { type PlantName, plantNames, plantTypes } from "./plants.ts";
+import {
+  type PlantName,
+  plantNames,
+  plantTypes,
+  type WitherState,
+} from "./plants.ts";
 
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 export const SAVE_FORMAT = "cs_farmer_save";
 
-type SavedPlant = { x: number; y: number; type: PlantName };
+type SavedPlant = {
+  x: number;
+  y: number;
+  type: PlantName;
+  witherState: WitherState;
+};
 type SaveFile = {
   format: typeof SAVE_FORMAT;
   version: typeof SAVE_VERSION;
@@ -19,7 +29,12 @@ type SaveFile = {
   balanceCents: number;
   position: { x: number; y: number };
   direction: Direction;
-  seeds: { wheat: "unlimited"; tomato: number; cucumber: number };
+  seeds: {
+    wheat: "unlimited";
+    tomato: number;
+    cucumber: number;
+    watermelon: number;
+  };
   harvest: Inventory;
   plants: SavedPlant[];
   editorCode: string;
@@ -27,12 +42,23 @@ type SaveFile = {
 
 export type LoadedGame = { farm: Farm; editorCode: string };
 
-export function createSaveFile(farm: Farm, editorCode: string): SaveFile {
+export function createSaveFile(
+  farm: Farm,
+  editorCode: string,
+  now = performance.now(),
+  random: () => number = Math.random,
+): SaveFile {
   const plants: SavedPlant[] = [];
   for (const row of farm.tiles) {
     for (const tile of row) {
       if (tile.plant) {
-        plants.push({ x: tile.x, y: tile.y, type: tile.plant.name });
+        tile.plant.resolveWither(now, random);
+        plants.push({
+          x: tile.x,
+          y: tile.y,
+          type: tile.plant.name,
+          witherState: tile.plant.witherState,
+        });
       }
     }
   }
@@ -47,6 +73,7 @@ export function createSaveFile(farm: Farm, editorCode: string): SaveFile {
       wheat: "unlimited",
       tomato: farm.seeds.tomato,
       cucumber: farm.seeds.cucumber,
+      watermelon: farm.seeds.watermelon,
     },
     harvest: { ...farm.harvest },
     plants,
@@ -81,12 +108,21 @@ function requireInteger(
   return value as number;
 }
 
-function requireInventory(value: unknown, name: string): Inventory {
+function requireInventory(
+  value: unknown,
+  name: string,
+  legacy = false,
+): Inventory {
   const inventory = requireRecord(value, name);
   return Object.fromEntries(
     plantNames.map((
       plant,
-    ) => [plant, requireInteger(inventory[plant], `${name}.${plant}`)]),
+    ) => [
+      plant,
+      legacy && plant === "watermelon"
+        ? 0
+        : requireInteger(inventory[plant], `${name}.${plant}`),
+    ]),
   ) as Inventory;
 }
 
@@ -101,7 +137,9 @@ export function parseSaveFile(text: string, now: number): LoadedGame {
   if (save.format !== SAVE_FORMAT) {
     throw new Error("This is not a Robot Farmer save file.");
   }
-  if (save.version !== 1 && save.version !== SAVE_VERSION) {
+  if (
+    save.version !== 1 && save.version !== 2 && save.version !== SAVE_VERSION
+  ) {
     throw new Error(`Unsupported save version: ${String(save.version)}.`);
   }
 
@@ -126,7 +164,11 @@ export function parseSaveFile(text: string, now: number): LoadedGame {
   }
   const tomatoSeeds = requireInteger(seeds.tomato, "seeds.tomato");
   const cucumberSeeds = requireInteger(seeds.cucumber, "seeds.cucumber");
-  const harvest = requireInventory(save.harvest, "harvest");
+  const legacy = save.version !== SAVE_VERSION;
+  const watermelonSeeds = legacy
+    ? 0
+    : requireInteger(seeds.watermelon, "seeds.watermelon");
+  const harvest = requireInventory(save.harvest, "harvest", legacy);
   if (
     !Array.isArray(save.plants) || save.plants.length > fieldSize * fieldSize
   ) throw new Error("plants must be a valid array.");
@@ -142,6 +184,7 @@ export function parseSaveFile(text: string, now: number): LoadedGame {
     wheat: Infinity,
     tomato: tomatoSeeds,
     cucumber: cucumberSeeds,
+    watermelon: watermelonSeeds,
   };
   farm.harvest = harvest;
   const occupied = new Set<string>();
@@ -160,6 +203,17 @@ export function parseSaveFile(text: string, now: number): LoadedGame {
     if (!plantNames.includes(entry.type as PlantName)) {
       throw new Error(`plants[${index}].type is invalid.`);
     }
+    let witherState: WitherState = "pending";
+    if (!legacy) {
+      if (
+        !(["pending", "healthy", "withered"] as unknown[]).includes(
+          entry.witherState,
+        )
+      ) {
+        throw new Error(`plants[${index}].witherState is invalid.`);
+      }
+      witherState = entry.witherState as WitherState;
+    }
     const key = `${plantX},${plantY}`;
     if (occupied.has(key)) {
       throw new Error(`More than one plant occupies tile (${key}).`);
@@ -167,6 +221,7 @@ export function parseSaveFile(text: string, now: number): LoadedGame {
     occupied.add(key);
     farm.tiles[plantY][plantX].plant = new plantTypes[entry.type as PlantName](
       now,
+      witherState,
     );
   }
   return { farm, editorCode: save.editorCode };
