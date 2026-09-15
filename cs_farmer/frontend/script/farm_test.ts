@@ -207,7 +207,13 @@ Deno.test("new command grammar requires an explicit direction and rejects old or
       instructions: [
         { command: "move", line: 1 },
         { command: "direction", argument: "left", line: 2 },
-        { command: "buy", argument: "watermelon", quantity: 2, line: 3 },
+        {
+          command: "buy",
+          argument: "watermelon",
+          quantity: { kind: "literal", value: 2 },
+          quantitySource: "2",
+          line: 3,
+        },
         { command: "plant", argument: "cucumber", line: 4 },
         { command: "harvest", line: 5 },
       ],
@@ -373,6 +379,44 @@ Deno.test("harvest inventory getter works standalone, in print, and in numeric c
   deepStrictEqual(outputs, ["4", "enough"]);
 });
 
+Deno.test("transaction quantities use numeric getters at execution time", async () => {
+  const result = compileProgram(
+    "sell(wheat, get_inventory(wheat))\nmove()\nbuy(tomato, get_x_cord())",
+  );
+  if (!result.ok) throw new Error(JSON.stringify(result.errors));
+  const farm = createFarm(5);
+  farm.harvest.wheat = 3;
+  farm.balance = 2;
+  await runProgram(
+    result.instructions,
+    farm,
+    () => {},
+    () => Promise.resolve(),
+  );
+  strictEqual(farm.harvest.wheat, 0);
+  strictEqual(farm.balance, 3.3);
+  strictEqual(farm.seeds.tomato, 1);
+});
+
+Deno.test("invalid evaluated transaction quantities fail without mutation", async () => {
+  const result = compileProgram("sell(wheat, -1)\nbuy(tomato, 1.5)");
+  if (!result.ok) throw new Error(JSON.stringify(result.errors));
+  const farm = createFarm();
+  farm.harvest.wheat = 2;
+  farm.balance = 1;
+  const steps: { success: boolean }[] = [];
+  await runProgram(
+    result.instructions,
+    farm,
+    (step) => steps.push(step),
+    () => Promise.resolve(),
+  );
+  deepStrictEqual(steps.map((step) => step.success), [false, false]);
+  strictEqual(farm.harvest.wheat, 2);
+  strictEqual(farm.balance, 1);
+  strictEqual(farm.seeds.tomato, 0);
+});
+
 Deno.test("while harvestability rechecks the crop after harvesting", async () => {
   const result = compileProgram("while(is_harvestable()):\n    harvest()");
   if (!result.ok) throw new Error("Expected valid program");
@@ -393,21 +437,20 @@ Deno.test("while harvestability rechecks the crop after harvesting", async () =>
   strictEqual(farm.harvest.wheat, 1);
 });
 
-Deno.test("invalid selling and harvestability syntax reject the whole program", () => {
+Deno.test("unsupported transaction and harvestability syntax rejects the whole program", () => {
   for (
     const source of [
       "sell()",
       "sell(wheat)",
-      "sell(wheat, -1)",
-      "sell(wheat, 1.5)",
       'sell(wheat, "2")',
+      "sell(wheat, get_direction())",
+      "sell(wheat, is_harvestable())",
+      "sell(wheat, get_position())",
       "sell(potato, 2)",
       "sell(wheat, 2, 3)",
       "buy()",
       "buy(watermelon)",
-      "buy(watermelon, -1)",
       "buy(potato, 2)",
-      "sell(wheat, 9007199254740992)",
       "is_harvestable(1)",
       "get_inventory()",
       "get_inventory(potato)",

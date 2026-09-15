@@ -6,9 +6,10 @@ Robot Farmer (`cs_farmer`) is a browser-based farming and programming game inspi
 
 - A visible 6x6 field with locked tiles greyed out; play starts in a 1x1 area that can be expanded through the shop, with a red border around the selected tile and visible growing/mature plants.
 - `move()` with a stored facing direction, set using `direction(right)`, plus `reset()`, `reset_field()`, `plant(type)`, and `harvest()`.
-- Indented, nested `while` and `if` blocks using `True`/`False`, numeric comparisons, and `and`/`&` or `or`/`|` combinations, with Compile and Stop controls.
+- Indented, nested `while`, fixed-count `for`, and `if` blocks; `break()`; numeric comparisons; string equality checks; and combined conditions, with Compile and Stop controls.
 - Position, direction, and harvested-inventory getters (`get_position()`, `get_x_cord()`, `get_y_cord()`, `get_direction()`, `get_inventory(type)`) and `print()` for quoted messages or returned values.
 - Tab indentation and Shift+Tab outdentation; Escape then Tab leaves the editor.
+- Nameable, collapsible program editors that can be added beneath one another; all share the farm and only one can run at a time.
 - A numeric balance above the editor, initialized to `0.00`.
 - Seed and harvest inventories below the field, with harvest inventory below seeds.
 - Unlimited free wheat seeds; tomato, cucumber, and watermelon seeds start at zero. Seeds can be purchased with `buy(type, quantity)`.
@@ -16,7 +17,7 @@ Robot Farmer (`cs_farmer`) is a browser-based farming and programming game inspi
 - One-time permanent withering outcomes, plus multiplied harvest yields for healthy 2x2 through 6x6 watermelon squares.
 - Sequential commands and loop checks with 500 ms pauses, whole-program validation, and an output log capped at 200 lines.
 - Position, crops, balance, and inventory preserved between runs in the current page session.
-- JSON save and load controls preserve the complete farm state and editor code across page reloads or devices.
+- JSON save and load controls preserve the complete farm state and all named programs across page reloads or devices.
 - Collapsible shop and plant-information panels for field expansions, prices, growth times, and wither chances.
 
 ## Documentation
@@ -29,15 +30,15 @@ Robot Farmer (`cs_farmer`) is a browser-based farming and programming game inspi
 
 ## Current scope
 
-Seeds are purchased through `buy(type, quantity)` and harvested produce is sold through `sell(type, quantity)`. Both operations validate the complete transaction before changing balance or inventory.
+Seeds are purchased through `buy(type, quantity)` and harvested produce is sold through `sell(type, quantity)`. Quantities may use numeric getters and are evaluated when their command runs. Both operations validate the complete transaction before changing balance or inventory.
 
 Variables, arithmetic, user-defined functions, automatic persistence, and backend integration are not implemented. Manual JSON save files can be downloaded and loaded; the Deno backend remains unchanged and the game runs entirely in the frontend.
 
 ## Saving and loading
 
-Use **Save** above the field to download `robot-farmer-save.json`. The file contains the balance, field size, position, facing direction, seed and harvest inventories, occupied crop tiles, and editor code. Money is stored as integer cents, unlimited wheat is represented by `"unlimited"`, and the format includes a version number.
+Use **Save** above the field to download `robot-farmer-save.json`. The file contains the balance, field size, position, facing direction, seed and harvest inventories, occupied crop tiles, and every program's ID, name, code, and collapsed state. Money is stored as integer cents, unlimited wheat is represented by `"unlimited"`, and the format includes a version number.
 
-Use **Load** to select a JSON save. The complete file is validated before the current game is replaced. Invalid, unsupported, or malformed saves leave the existing game unchanged. Loaded crops restart as newly planted seedlings; crop maturity is intentionally not saved yet. Version-3 saves preserve resolved healthy/withered outcomes so they cannot reroll.
+Use **Load** to select a JSON save. The complete file is validated before the current game is replaced. Invalid, unsupported, or malformed saves leave the existing game unchanged. Loaded crops restart as newly planted seedlings; crop maturity is intentionally not saved yet. Version-4 saves preserve the program list and resolved healthy/withered outcomes. Version 1–3 saves automatically migrate their single `editorCode` value into `Program 1`.
 
 The command reference is collapsed initially; click its header or use Enter/Space while focused to collapse or expand it. The arrow shows its state.
 

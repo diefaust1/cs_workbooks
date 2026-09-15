@@ -10,9 +10,9 @@
 - Harvest inventory: `0` for each plant type.
 - Field size: `1x1`.
 
-Balance sits above the code editor. Seeds sit below the field, followed by harvest inventory. State survives successive Compile runs and Stop. Reloading clears the live session unless the player first downloads a JSON save and loads it afterward.
+Balance sits above the program editors. Seeds sit below the field, followed by harvest inventory. Every program operates on the same farm, and state survives successive runs and Stop. Reloading clears the live session unless the player first downloads a JSON save and loads it afterward.
 
-Save files preserve the balance, field size, position, facing direction, inventories, occupied tiles, each plant's resolved withering outcome, and editor code. They do not preserve plant maturity: every loaded crop starts again as a newly planted seedling, but a resolved healthy/withered outcome cannot reroll.
+Save files preserve the balance, field size, position, facing direction, inventories, occupied tiles, each plant's resolved withering outcome, and all named programs. They do not preserve plant maturity: every loaded crop starts again as a newly planted seedling, but a resolved healthy/withered outcome cannot reroll.
 
 ## Field expansion
 
@@ -45,7 +45,7 @@ An expansion is rejected without changing the field or balance when funds are in
 
 A seedling marks a growing plant. Mature plants display their crop symbol on a green tile. Growth continues while programs are stopped; the frontend refreshes its display periodically. Maturity is based on timestamps, not the number of display refreshes.
 
-When a crop first reaches maturity, its wither chance is rolled exactly once. The permanent result is either healthy or withered and is stored in version-3 saves. Every withered crop uses the same wilted-flower icon.
+When a crop first reaches maturity, its wither chance is rolled exactly once. The permanent result is either healthy or withered and is stored in version-3 and later saves. Every withered crop uses the same wilted-flower icon.
 
 ## Harvesting
 
@@ -64,13 +64,13 @@ Use `get_inventory(wheat)`, `get_inventory(tomato)`, `get_inventory(cucumber)`, 
 
 ## Buying seeds
 
-`buy(tomato, 2)` buys two tomato seeds. The first argument accepts all four plant types and the second must be a non-negative whole-number literal. The complete purchase cost must be available in the balance; otherwise balance and inventory remain unchanged. Wheat purchases cost zero and leave its already-unlimited inventory unchanged.
+`buy(tomato, 2)` buys two tomato seeds. The first argument accepts all four plant types. The second may be a numeric literal or numeric getter such as `get_inventory(wheat)` and is evaluated when the command executes. Its result must be a non-negative safe whole number. The complete purchase cost must be available in the balance; otherwise balance and inventory remain unchanged. Wheat purchases cost zero and leave its already-unlimited inventory unchanged.
 
 ## Selling
 
-`sell(wheat, 2)` sells two harvested wheat plants. The first argument is `wheat`, `tomato`, `cucumber`, or `watermelon`; the second is a non-negative whole-number literal within JavaScript's safe integer range. Both arguments are required and separated by a comma. Selling zero is allowed and changes nothing.
+`sell(wheat, 2)` sells two harvested wheat plants. `sell(wheat, get_inventory(wheat))` sells the complete wheat harvest held when that command executes. The first argument is `wheat`, `tomato`, `cucumber`, or `watermelon`; the second may be a numeric literal, coordinate getter, or inventory getter. Both arguments are required and separated by a comma. The evaluated quantity must be a non-negative safe whole number. Selling zero is allowed and changes nothing.
 
-A sale deducts the requested amount from harvest inventory and adds selling price times quantity to balance. It does not sell seeds or crops still on the field. Insufficient inventory rejects the sale without changing inventory or money; execution continues with a message. Negative, fractional, missing, or invalid arguments reject the whole program during compilation. Balance arithmetic is rounded to cents; unrepresentable totals are rejected before mutation.
+A sale deducts the requested amount from harvest inventory and adds selling price times quantity to balance. It does not sell seeds or crops still on the field. Insufficient inventory or a negative, fractional, unsafe, or otherwise invalid evaluated quantity rejects that command without changing inventory or money; execution continues with a message. Unsupported quantity syntax rejects the whole program during compilation. Balance arithmetic is rounded to cents; unrepresentable totals are rejected before mutation.
 
 ## Checking harvestability
 

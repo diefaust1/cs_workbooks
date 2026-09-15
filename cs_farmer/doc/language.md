@@ -18,11 +18,12 @@ Write one statement per line. Direction and plant arguments are lowercase names 
 | `get_direction()` | Return `up`, `down`, `left`, or `right` for the current facing direction. |
 | `get_inventory(wheat)` | Return the harvested inventory count. Also accepts `tomato`, `cucumber`, or `watermelon`. |
 | `print("Hello")` | Print a quoted message or a value such as `get_position()`. |
-| `buy(tomato, 2)` | Buy two tomato seeds using balance. Accepts every plant type. |
+| `buy(tomato, 2)` | Buy tomato seeds using balance. Quantity may be a number or numeric getter. |
 | `plant(wheat)` | Plant on the selected empty tile. Also accepts `tomato`, `cucumber`, or `watermelon`. Requires a seed. |
 | `is_harvestable()` | Return True for a mature plant on the selected tile, otherwise False. |
-| `sell(wheat, 2)` | Sell two harvested plants and credit balance. Accepts every plant type. |
+| `sell(wheat, get_inventory(wheat))` | Sell harvested plants and credit balance. Quantity may be a number or numeric getter. |
 | `harvest()` | Remove the selected plant; healthy mature watermelons use square yield multipliers. |
+| `break()` | Exit the nearest enclosing `while` or `for` loop. |
 
 The old `right()`, `left()`, `up()`, and `down()` commands have been replaced and are rejected. A blocked edge move stays in place and continues execution. Missing seeds, occupied tiles, and empty harvests print a message and continue without consuming inventory.
 
@@ -47,6 +48,17 @@ while(True):
 
 A loop header requires parentheses, a colon, and a nonempty body indented four spaces beyond the header. `while(True):` alone is incomplete.
 
+## For loops and break
+
+```python
+for i in range(5):
+    move()
+```
+
+`for name in range(count):` repeats its body exactly `count` times. The count must be a non-negative whole-number literal. The name is required by the syntax but cannot be read inside the body yet, so `print(i)` is rejected. Only the one-argument `range(count)` form is supported.
+
+`break()` immediately exits the nearest enclosing `while` or `for` loop and continues after it. It may be nested inside an `if` or another loop, but is rejected when it is not inside a loop.
+
 ## If blocks
 
 ```python
@@ -58,18 +70,20 @@ if(False):
 print(get_position())
 ```
 
-`if(True):` executes its body once, then continues after the block. `if(False):` skips its body and runs its `else:` body when present. Both use the same four-space indentation as while loops and can nest with if/while blocks. All branches are syntax-checked before anything executes. Headers require a nonempty body.
+`if(True):` executes its body once, then continues after the block. `if(False):` skips its body and runs its `else:` body when present. Both use the same four-space indentation as loops and can nest with if/while/for blocks. All branches are syntax-checked before anything executes. Headers require a nonempty body.
 
-Conditions accept the case-sensitive literals `True` and `False`, or one comparison using `==`, `!=`, `<`, `<=`, `>`, or `>=`. Both operands must be numbers or the numeric getters `get_x_cord()`, `get_y_cord()`, and `get_inventory(type)`. Signed decimal numbers and getter-to-getter comparisons are supported.
+Conditions accept the case-sensitive literals `True` and `False`, or one comparison. Numbers and the numeric getters `get_x_cord()`, `get_y_cord()`, and `get_inventory(type)` support `==`, `!=`, `<`, `<=`, `>`, and `>=`. Strings and `get_direction()` support only `==` and `!=`. Both operands must have the same supported type. Signed decimal numbers and getter-to-getter comparisons are supported.
 
 ```python
 while(get_x_cord() < 4):
     move()
 if(get_x_cord() == 4):
     print("Reached the edge")
+if(get_direction() != "right"):
+    direction(right)
 ```
 
-Conditions are evaluated when reached, and while conditions are evaluated again before every iteration. Numeric comparisons do not coerce strings or booleans into numbers. Coordinate tuples (`get_position()`), strings, chained comparisons, `not`, arithmetic, and `elif` are not supported yet.
+Conditions are evaluated when reached, and while conditions are evaluated again before every iteration. Comparisons do not coerce between strings, numbers, or booleans. Coordinate tuples (`get_position()`), ordered string comparisons such as `<`, chained comparisons, `not`, arithmetic, and `elif` are not supported.
 
 ## Combining conditions and else
 
@@ -118,11 +132,11 @@ On a field of at least 2x2, starting at (0, 0) with an empty harvest inventory, 
 
 Compile validates the complete program before any action runs. Syntax errors reject the whole program, show the faulty lines, and leave the farm unchanged. Empty/comment-only programs do nothing.
 
-Valid programs continue from the current position. Commands (including print/getters/reset_field) and while/if checks each pause for 500 ms before executing. Stop cancels the pending action and preserves the last completed state. Controls unlock once the current timer settles (normally within 500 ms; browsers can delay background timers).
+Valid programs continue from the current position. Commands (including print/getters/reset_field) and loop/if checks each pause for 500 ms before executing. Stop cancels the pending action and preserves the last completed state. Every editor shares the same farm state. Only one program can run at a time, so all other Run buttons are disabled until it completes or stops. The shared output names the program when execution starts.
 
-The editor is read-only and Compile is disabled while running. Output retains its latest 200 lines and is cleared on each Compile attempt. Reloading the page starts a new session at (0, 0) with the initial inventory. `reset()` resets position and facing to (0, 0) and right, preserving crops and inventory.
+Use **Add new editor** to append another nameable program. Editors can be collapsed independently. Added editors can be deleted after confirmation; the first editor cannot be deleted. While a program runs, all editors are read-only and their Run buttons are disabled. Output retains its latest 200 lines and is cleared on each Compile attempt. Reloading the page starts a new session at (0, 0) with the initial inventory unless a save is loaded. `reset()` resets position and facing to (0, 0) and right, preserving crops and inventory.
 
-Loop checks yield even in true loops containing only false loops. Infinite loops are not expanded into arrays and run until stopped. No automatic iteration limit, `break`, `continue`, variables or arithmetic expressions are provided yet.
+Loop checks yield even in true loops containing only false loops. Loops are not expanded into arrays, and infinite while loops run until stopped or interrupted with `break()`. No automatic iteration limit, `continue`, usable variables, or arithmetic expressions are provided yet.
 
 `move()` and `move( )` take no arguments. Set facing with `direction(up)`, `direction(down)`, `direction(left)`, or `direction(right)`. The old argument-taking movement form is rejected.
 
@@ -138,7 +152,7 @@ print(is_harvestable())
 
 Use the boolean directly in if/while conditions or combine it with `and`/`&` and `or`/`|`. It is not a numeric comparison operand. `print(is_harvestable())` displays True or False.
 
-`sell(type, quantity)` requires two comma-separated arguments. Quantity must be a non-negative whole-number literal; zero is a no-op. A sale requires enough harvested plants. It never partially sells an order. Invalid syntax rejects the entire program, while insufficient stock logs a message and continues. See [Farming](farming.md) for prices and inventory rules.
+`sell(type, quantity)` requires two comma-separated arguments. Quantity may be a numeric literal, `get_x_cord()`, `get_y_cord()`, or `get_inventory(type)`. It is evaluated when the command executes and must produce a non-negative safe whole number; zero is a no-op. A sale requires enough harvested plants and never partially sells an order. An invalid result or insufficient stock logs a message and continues. See [Farming](farming.md) for prices and inventory rules.
 
 `buy(type, quantity)` uses the same argument rules and requires enough balance for the complete purchase. It never partially buys an order. The accepted plant names for buying, planting, selling, and inventory checks are `wheat`, `tomato`, `cucumber`, and `watermelon`.
 

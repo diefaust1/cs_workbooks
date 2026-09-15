@@ -38,7 +38,22 @@ h1 { font-size: clamp(28px, 3.2vw, 42px); line-height: 1.2; letter-spacing: -1.4
 h2 { margin: 0; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 12px; }
 .section-number { color: #7a8877; font: 11px Consolas, monospace; }
 .panel-meta { color: var(--muted); font-size: 10px; }
+.program-list { display: flex; flex-direction: column; gap: 16px; }
 .editor-panel { display: flex; flex-direction: column; }
+.editor-panel:not([open]) > .editor-body, .editor-panel:not([open]) > .editor-footer { display: none; }
+.program-heading { justify-content: flex-start; }
+.program-heading .panel-meta { margin-left: auto; }
+.program-name { min-width: 0; flex: 1; padding: 7px 9px; border: 1px solid transparent; border-radius: 6px; background: transparent; color: #293b31; font: 600 15px "Segoe UI", sans-serif; }
+.program-name:hover:not(:disabled) { border-color: var(--border); background: #fff; }
+.program-name:focus-visible { outline: 2px solid #597548; outline-offset: 1px; border-color: transparent; background: #fff; }
+.program-delete { flex-shrink: 0; padding: 7px 10px; border: 1px solid #bca4a0; border-radius: 6px; background: transparent; color: #8b3028; font: 600 12px "Segoe UI", sans-serif; cursor: pointer; }
+.program-delete:hover:not(:disabled) { background: #f4e4e0; }
+.program-delete:focus-visible { outline: 2px solid #9d4038; outline-offset: 2px; }
+.program-delete:disabled, .program-name:disabled { cursor: not-allowed; opacity: 0.6; }
+.add-program-button { width: 100%; min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 8px; border: 1px dashed #829675; border-radius: 10px; background: #f8f9f3; color: #36522d; font: 600 13px "Segoe UI", sans-serif; cursor: pointer; }
+.add-program-button:hover:not(:disabled) { background: #e8eedc; }
+.add-program-button:focus-visible { outline: 2px solid #597548; outline-offset: 2px; }
+.add-program-button:disabled { cursor: not-allowed; opacity: 0.6; }
 .editor-body { display: flex; flex: 1; min-height: 300px; background: #202d26; }
 textarea { display: block; width: 100%; min-height: 300px; resize: vertical; padding: 26px; border: 0; border-radius: 0; background: transparent; color: #e5ecde; font: 14px/1.8 Consolas, "Courier New", monospace; tab-size: 4; }
 textarea::placeholder { color: #a0b39f; opacity: 1; }

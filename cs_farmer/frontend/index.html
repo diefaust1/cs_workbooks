@@ -32,20 +32,24 @@
         <section class="panel balance-panel" aria-labelledby="balance-title">
           <h2 id="balance-title" data-i18n="Balance">Balance</h2><span id="balance">0.00</span>
         </section>
-        <section class="panel editor-panel" aria-labelledby="editor-title">
-          <div class="panel-heading">
-            <h2 id="editor-title"><span class="section-number">01</span> <span data-i18n="Your code">Your code</span></h2>
-            <span class="panel-meta" data-i18n="EDITOR">EDITOR</span>
-          </div>
-          <div class="editor-body">
-            <label class="sr-only" for="code-editor" data-i18n="Write your farm code">Write your farm code</label>
-            <textarea id="code-editor" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="compile-note" placeholder="Insert code here..." data-i18n-placeholder="Insert code here..."></textarea>
-          </div>
-          <div class="editor-footer">
-            <button class="compile-button" id="compile-button" type="button" aria-describedby="compile-note"><span aria-hidden="true">▷</span> <span data-i18n="Compile">Compile</span></button>
-            <button class="compile-button stop-button" id="stop-button" type="button" disabled data-i18n="Stop">Stop</button>
-          </div>
-        </section>
+        <div id="program-list" class="program-list">
+          <details class="panel editor-panel disclosure-panel" id="program-1" data-program-id="program-1" open>
+            <summary class="panel-heading program-heading">
+              <span class="section-number program-number">01</span>
+              <input class="program-name" id="program-name-1" value="Program 1" aria-label="Program name" data-i18n-aria-label="Program name" />
+              <span class="panel-meta" data-i18n="EDITOR">EDITOR</span>
+            </summary>
+            <div class="editor-body">
+              <label class="sr-only" for="code-editor" data-i18n="Write your farm code">Write your farm code</label>
+              <textarea id="code-editor" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="compile-note" placeholder="Insert code here..." data-i18n-placeholder="Insert code here..."></textarea>
+            </div>
+            <div class="editor-footer">
+              <button class="compile-button" id="compile-button" type="button" aria-describedby="compile-note"><span aria-hidden="true">▷</span> <span data-i18n="Compile">Compile</span></button>
+              <button class="compile-button stop-button" id="stop-button" type="button" disabled data-i18n="Stop">Stop</button>
+            </div>
+          </details>
+        </div>
+        <button class="add-program-button" id="add-program-button" type="button"><span aria-hidden="true">＋</span> <span data-i18n="Add new editor">Add new editor</span></button>
           <section class="panel output-panel" aria-labelledby="output-title">
             <div class="panel-heading">
               <h2 id="output-title" data-i18n="Output">Output</h2>
@@ -114,8 +118,8 @@
           <dl class="command-list">
             <div><dt><code>direction(right)</code></dt><dd data-i18n="Face up, down, left, or right without moving.">Face up, down, left, or right without moving.</dd></div>
             <div><dt><code>is_harvestable()</code></dt><dd data-i18n="Return True if the selected tile has a fully grown plant; otherwise False.">Return True if the selected tile has a fully grown plant; otherwise False.</dd></div>
-            <div><dt><code>buy(tomato, 2)</code></dt><dd data-i18n="Buy a whole number of wheat, tomato, cucumber, or watermelon seeds using your balance.">Buy a whole number of wheat, tomato, cucumber, or watermelon seeds using your balance.</dd></div>
-            <div><dt><code>sell(wheat, 2)</code></dt><dd data-i18n="Sell a whole number of harvested wheat, tomato, cucumber, or watermelon plants and add their value to your balance.">Sell a whole number of harvested wheat, tomato, cucumber, or watermelon plants and add their value to your balance.</dd></div>
+            <div><dt><code>buy(tomato, 2)</code></dt><dd data-i18n="Buy seeds using a non-negative whole number or numeric getter as the quantity.">Buy seeds using a non-negative whole number or numeric getter as the quantity.</dd></div>
+            <div><dt><code>sell(wheat, get_inventory(wheat))</code></dt><dd data-i18n="Sell harvested plants using a non-negative whole number or numeric getter as the quantity.">Sell harvested plants using a non-negative whole number or numeric getter as the quantity.</dd></div>
             <div><dt><code>move()</code></dt><dd data-i18n="Move one tile in the current direction. Starts facing right. The blue edge shows the facing side.">Move one tile in the current direction. Starts facing right. The blue edge shows the facing side.</dd></div>
             <div><dt><code>plant(wheat)</code></dt><dd data-i18n="Plant wheat, tomato, cucumber, or watermelon on an empty tile, using one seed. Wheat seeds are unlimited.">Plant wheat, tomato, cucumber, or watermelon on an empty tile, using one seed. Wheat seeds are unlimited.</dd></div>
             <div><dt><code>harvest()</code></dt><dd data-i18n="Collect a grown healthy plant. Immature and withered plants are removed without a reward. Healthy watermelon squares gain a yield multiplier.">Collect a grown healthy plant. Immature and withered plants are removed without a reward. Healthy watermelon squares gain a yield multiplier.</dd></div>
@@ -127,15 +131,17 @@
             <div><dt><code>get_direction()</code></dt><dd data-i18n="Return the current direction.">Return the current direction.</dd></div>
             <div><dt><code>get_inventory(wheat)</code></dt><dd data-i18n="Return the harvested inventory count for wheat, tomato, cucumber, or watermelon.">Return the harvested inventory count for wheat, tomato, cucumber, or watermelon.</dd></div>
             <div><dt><code>print("Hello")</code></dt><dd data-i18n="Print a quoted string or value, such as print(get_position()). Single quotes work too.">Print a quoted string or value, such as print(get_position()). Single quotes work too.</dd></div>
-            <div><dt><code>if(True):</code></dt><dd data-i18n="Run the indented block once. if(False): skips it. Numeric comparisons are supported, such as get_x_cord() == 2.">Run the indented block once. if(False): skips it. Numeric comparisons are supported, such as get_x_cord() == 2.</dd></div>
+            <div><dt><code>if(True):</code></dt><dd data-i18n="Run the indented block once. Conditions support numeric comparisons and string equality checks.">Run the indented block once. Conditions support numeric comparisons and string equality checks.</dd></div>
             <div><dt><code>else:</code></dt><dd data-i18n="Run this indented block when the matching if is false. Align else with its if.">Run this indented block when the matching if is false. Align else with its if.</dd></div>
             <div><dt><code>while(True):</code></dt><dd data-i18n="Repeat while the condition is true. For example: while(get_x_cord() &lt; 4):">Repeat while the condition is true. For example: while(get_x_cord() &lt; 4):</dd></div>
             <div><dt><code>while(False):</code></dt><dd data-i18n="Skip the indented block.">Skip the indented block.</dd></div>
+            <div><dt><code>for i in range(5):</code></dt><dd data-i18n="Repeat the indented block a fixed number of times. The loop name cannot be used inside the block yet.">Repeat the indented block a fixed number of times. The loop name cannot be used inside the block yet.</dd></div>
+            <div><dt><code>break()</code></dt><dd data-i18n="Exit the nearest while or for loop.">Exit the nearest while or for loop.</dd></div>
             <div><dt><code>and / &amp;</code></dt><dd data-i18n="Both conditions must be true. Evaluated before or.">Both conditions must be true. Evaluated before or.</dd></div>
             <div><dt><code>or / |</code></dt><dd data-i18n="At least one condition must be true. Use parentheses to group conditions.">At least one condition must be true. Use parentheses to group conditions.</dd></div>
           </dl>
           <div class="language-help">
-            <p id="compile-note" data-i18n="One statement per line. Tab inserts four spaces; Shift+Tab removes indentation. Press Escape then Tab to leave the editor. Commands and while/if checks each pause for 500 ms.">One statement per line. Tab inserts four spaces; Shift+Tab removes indentation. Press Escape then Tab to leave the editor. Commands and while/if checks each pause for 500 ms.</p>
+            <p id="compile-note" data-i18n="One statement per line. Tab inserts four spaces; Shift+Tab removes indentation. Press Escape then Tab to leave the editor. Commands and loop/if checks each pause for 500 ms.">One statement per line. Tab inserts four spaces; Shift+Tab removes indentation. Press Escape then Tab to leave the editor. Commands and loop/if checks each pause for 500 ms.</p>
             <pre aria-label="Example loop" data-i18n-aria-label="Example loop">while(True):
     plant(wheat)
     harvest()

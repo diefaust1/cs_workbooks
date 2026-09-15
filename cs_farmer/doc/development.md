@@ -9,11 +9,11 @@ cs_farmer/
   backend/                 Unchanged Deno starter server and tests
   frontend/
     deno.json              Browser and Deno test types
-    index.html             Vite entry: editor, field, inventories, reference
+    index.html             Vite entry: program editors, field, inventories, reference
     css/app.css            Layout, tiles, crop and selection styling
     script/app.ts          DOM updates, execution controls, growth display
     script/editor.ts       Tab/Shift+Tab editing and focus escape
-    script/program.ts      While/if parser and cancellable command runner
+    script/program.ts      While/for/if parser and cancellable command runner
     script/expressions.ts  Literal/getter parsing, evaluation, output formatting
     script/farm.ts         Array-based field, inventories, movement, farming
     script/plants.ts       Abstract Plant and concrete crop classes
@@ -83,15 +83,15 @@ For a manual check:
 
 ## Implementation
 
-The parser validates the whole source into statements before execution. The runner walks statements with an explicit stack and waits 500 ms before commands and while/if checks. If advances its parent once before entering its body; while revisits its condition after its body. Conditions accept True/False, numeric comparisons, and grouped AND/OR expressions with short-circuit evaluation. The parser validates both operands; the runner evaluates getters against current farm state on every check. It supports cancellation and never evaluates player code as JavaScript.
+The parser validates the whole source into statements before execution. The runner walks statements with an explicit stack and waits 500 ms before commands and loop/if checks. If advances its parent once before entering its body; while revisits its condition; for repeats a body without expanding it in memory. `break()` truncates the stack through the nearest loop frame. Conditions accept True/False, numeric comparisons, string `==`/`!=`, and grouped AND/OR expressions with short-circuit evaluation. The parser validates both operands; the runner evaluates getters against current farm state on every check. It supports cancellation and never evaluates player code as JavaScript.
 
 Farm tiles use `tiles[y][x]`, each holding coordinates and an optional Plant. A farm starts with one active tile; each successful expansion appends one active column and one active row through the 6x6 maximum. The UI always renders 36 tile elements and marks coordinates outside the active square as locked. Expansion cost is `4 ** currentSize`. Seed and harvest inventories are keyed by plant name and can be read through `get_inventory(type)`. Growth uses `performance.now()` timestamps, with an injectable clock for deterministic tests. A 100 ms display refresh resolves one-time wither rolls at maturity and updates the display. Runtime action failures are logged and execution continues.
 
-The app preserves its farm object between runs, caps output at 200 lines, and prints player text using `textContent`. `reset()` resets position and facing to (0, 0) and right, preserving crops and inventory. Position getters return numeric values or a copied coordinate pair. The expression module parses a small allowlist of literal/getter forms without eval. Print uses a dedicated output value, while ordinary actions retain diagnostic messages. Field reset removes crops without changing inventories or balance. Buying and selling validate whole transactions before mutating cents-based balance and inventory.
+The app preserves its farm object between runs, caps shared output at 200 lines, and prints player text using `textContent`. Program editor objects own their name, code area, collapse panel, and controls. A single `runningProgramId` disables every Run button and enables Stop only for the active program. `reset()` resets position and facing to (0, 0) and right, preserving crops and inventory. Position getters return numeric values or a copied coordinate pair. The expression module parses a small allowlist of literal/getter forms without eval. Print uses a dedicated output value, while ordinary actions retain diagnostic messages. Field reset removes crops without changing inventories or balance. Buying and selling evaluate numeric quantity expressions at execution time, then validate whole transactions before mutating cents-based balance and inventory.
 
 ## Save files and shop
 
-`save.ts` maps the live class-based farm into a versioned JSON data shape. Version 3 stores the field size, cents as an integer, watermelon inventories, and every plant's permanent wither state; unlimited wheat remains `"unlimited"`. Version-1 saves migrate as 5x5 fields, while versions 1 and 2 receive zero watermelon inventory and pending wither outcomes. Loading validates the format marker, version, size, bounds, enums, inventories, crop types, wither states, unique tiles, and editor code before returning a replacement farm. Plants restart their growth after loading, but resolved wither outcomes do not reroll.
+`save.ts` maps the live class-based farm into a versioned JSON data shape. Version 4 stores all program IDs, names, code, and collapsed states in addition to field size, cents, watermelon inventories, and every plant's permanent wither state; unlimited wheat remains `"unlimited"`. Version-1 saves migrate as 5x5 fields, versions 1 and 2 receive zero watermelon inventory and pending wither outcomes, and versions 1–3 migrate their single editor into `Program 1`. Loading validates the format marker, version, size, bounds, enums, inventories, crop types, wither states, unique tiles, and programs before returning replacement state. Plants restart their growth after loading, but resolved wither outcomes do not reroll.
 
 The Save button creates an `application/json` browser download. Load uses a hidden JSON file input and applies parsed state only after successful validation. Both controls are unavailable while code executes. The collapsible Shop below Output shows the current size and purchases the next expansion from the live balance.
 
@@ -111,7 +111,7 @@ From `cs_farmer/backend`, use `deno task dev` to start it and `deno test` to run
 
 ## Comparison and reference checks
 
-After expanding to at least 5x5, run `while(get_x_cord() < 4):` with an indented `move()` from (0, 0). It should stop at (4, 0). Verify that `direction()` rejects the entire program. Tests cover all six operators, numeric type validation, getter-to-getter comparison, and loop exit behavior.
+After expanding to at least 5x5, run `while(get_x_cord() < 4):` with an indented `move()` from (0, 0). It should stop at (4, 0). Verify that `direction()` rejects the entire program. Tests cover all six numeric operators, string equality, type validation, getter-to-getter comparison, fixed-count loops, break, and loop exit behavior.
 
 The command reference, shop, and plant-information panel use native `details`/`summary` and are collapsed by default. Their summaries supply mouse and keyboard toggling; CSS rotates each arrow to reflect the open state. No JavaScript click handler is needed. Check that collapsing hides each panel's contents and expanding restores them.
 

@@ -20,6 +20,27 @@ export type Expression =
   | { kind: "getter"; name: Getter }
   | { kind: "inventory"; plant: PlantName };
 
+export function isNumericExpression(
+  expression: Expression | undefined,
+): expression is Expression {
+  if (!expression) return false;
+  if (expression.kind === "literal") {
+    return typeof expression.value === "number";
+  }
+  if (expression.kind === "inventory") return true;
+  return expression.name === "get_x_cord" || expression.name === "get_y_cord";
+}
+
+function isStringExpression(
+  expression: Expression | undefined,
+): expression is Expression {
+  if (!expression) return false;
+  if (expression.kind === "literal") {
+    return typeof expression.value === "string";
+  }
+  return expression.kind === "getter" && expression.name === "get_direction";
+}
+
 // Only literals and named, read-only getters are accepted. Never evaluate JS.
 export function parseExpression(source: string): Expression | undefined {
   const text = source.trim();
@@ -81,6 +102,41 @@ export type Condition = boolean | { kind: "harvestable" } | {
   right: Expression;
 } | { kind: "and" | "or"; operands: Condition[] };
 
+function findComparison(
+  text: string,
+): { index: number; operator: ComparisonOperator } | undefined {
+  let depth = 0;
+  let quote: '"' | "'" | undefined;
+  let escaped = false;
+  for (let index = 0; index < text.length; index++) {
+    const character = text[index];
+    if (quote) {
+      if (escaped) escaped = false;
+      else if (character === "\\") escaped = true;
+      else if (character === quote) quote = undefined;
+      continue;
+    }
+    if (character === '"' || character === "'") {
+      quote = character;
+      continue;
+    }
+    if (character === "(") {
+      depth++;
+      continue;
+    }
+    if (character === ")") {
+      depth--;
+      continue;
+    }
+    if (depth !== 0) continue;
+    const operator = ["==", "!=", "<=", ">=", "<", ">"].find((candidate) =>
+      text.startsWith(candidate, index)
+    ) as ComparisonOperator | undefined;
+    if (operator) return { index, operator };
+  }
+  return undefined;
+}
+
 export function parseCondition(
   source: string,
   nesting = 0,
@@ -93,9 +149,22 @@ export function parseCondition(
     let depth = 0;
     let start = 0;
     let outerClosesAt = -1;
+    let quote: '"' | "'" | undefined;
+    let escaped = false;
     for (let index = 0; index < text.length; index++) {
-      if (text[index] === "(") depth++;
-      else if (text[index] === ")") {
+      const character = text[index];
+      if (quote) {
+        if (escaped) escaped = false;
+        else if (character === "\\") escaped = true;
+        else if (character === quote) quote = undefined;
+        continue;
+      }
+      if (character === '"' || character === "'") {
+        quote = character;
+        continue;
+      }
+      if (character === "(") depth++;
+      else if (character === ")") {
         if (--depth < 0) return undefined;
         if (depth === 0 && outerClosesAt === -1) outerClosesAt = index;
       }
@@ -104,13 +173,13 @@ export function parseCondition(
       const word = text.slice(index, index + kind.length) === kind &&
         !/[a-zA-Z0-9_]/.test(text[index - 1] ?? "") &&
         !/[a-zA-Z0-9_]/.test(text[index + kind.length] ?? "");
-      if (text[index] === symbol || word) {
+      if (character === symbol || word) {
         parts.push(text.slice(start, index));
         index += word ? kind.length - 1 : 0;
         start = index + 1;
       }
     }
-    if (depth !== 0) return undefined;
+    if (depth !== 0 || quote) return undefined;
     if (parts.length) {
       parts.push(text.slice(start));
       const operands = parts.map((part) => parseCondition(part, nesting + 1));
@@ -123,18 +192,20 @@ export function parseCondition(
   }
   if (text === "True" || text === "False") return text === "True";
   if (/^is_harvestable\(\s*\)$/.test(text)) return { kind: "harvestable" };
-  const comparison = /^(.+?)\s*(==|!=|<=|>=|<|>)\s*(.+)$/.exec(text);
+  const comparison = findComparison(text);
   if (!comparison) return undefined;
-  const left = parseExpression(comparison[1]);
-  const right = parseExpression(comparison[3]);
-  const numeric = (value: Expression | undefined): value is Expression =>
-    !!value &&
-    (value.kind === "literal"
-      ? typeof value.value === "number"
-      : value.kind === "inventory" || value.name === "get_x_cord" ||
-        value.name === "get_y_cord");
-  if (!numeric(left) || !numeric(right)) return undefined;
-  return { left, operator: comparison[2] as ComparisonOperator, right };
+  const left = parseExpression(text.slice(0, comparison.index));
+  const right = parseExpression(
+    text.slice(comparison.index + comparison.operator.length),
+  );
+  const operator = comparison.operator;
+  const numericComparison = isNumericExpression(left) &&
+    isNumericExpression(right);
+  const stringComparison = isStringExpression(left) &&
+    isStringExpression(right) &&
+    (operator === "==" || operator === "!=");
+  if (!numericComparison && !stringComparison) return undefined;
+  return { left, operator, right };
 }
 export function evaluateCondition(
   condition: Condition,
@@ -152,10 +223,15 @@ export function evaluateCondition(
         evaluateCondition(operand, farm, now)
       );
   }
-  const left = evaluateExpression(condition.left, farm);
-  const right = evaluateExpression(condition.right, farm);
+  const left = evaluateExpression(condition.left, farm, now);
+  const right = evaluateExpression(condition.right, farm, now);
+  if (typeof left === "string" && typeof right === "string") {
+    if (condition.operator === "==") return left === right;
+    if (condition.operator === "!=") return left !== right;
+    throw new Error("Strings only support == and != comparisons.");
+  }
   if (typeof left !== "number" || typeof right !== "number") {
-    throw new Error("Comparison operands must be numbers.");
+    throw new Error("Comparison operands must have matching supported types.");
   }
   switch (condition.operator) {
     case "==":
