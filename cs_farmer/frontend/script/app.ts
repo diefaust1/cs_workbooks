@@ -9,15 +9,13 @@ import {
 } from "./farm.ts";
 import { type Language, translate, translatePage } from "./i18n.ts";
 import { plantNames } from "./plants.ts";
-import { parseSaveFile, serializeGame } from "./save.ts";
+import { parseSaveFile, type SavedProgram, serializeGame } from "./save.ts";
 
 const field = document.querySelector<HTMLDivElement>("#field")!;
-const editor = document.querySelector<HTMLTextAreaElement>("#code-editor")!;
-enableIndentation(editor);
-const compileButton = document.querySelector<HTMLButtonElement>(
-  "#compile-button",
+const programList = document.querySelector<HTMLDivElement>("#program-list")!;
+const addProgramButton = document.querySelector<HTMLButtonElement>(
+  "#add-program-button",
 )!;
-const stopButton = document.querySelector<HTMLButtonElement>("#stop-button")!;
 const output = document.querySelector<HTMLPreElement>("#output")!;
 const status = document.querySelector<HTMLSpanElement>("#execution-status")!;
 const positionLabel = document.querySelector<HTMLSpanElement>("#position")!;
@@ -36,6 +34,21 @@ const saveButton = document.querySelector<HTMLButtonElement>("#save-button")!;
 const loadButton = document.querySelector<HTMLButtonElement>("#load-button")!;
 const loadInput = document.querySelector<HTMLInputElement>("#load-input")!;
 const t = (text: string) => translate(text, language);
+type ProgramEditor = {
+  id: string;
+  root: HTMLDetailsElement;
+  numberLabel: HTMLElement;
+  nameInput: HTMLInputElement;
+  editor: HTMLTextAreaElement;
+  compileButton: HTMLButtonElement;
+  stopButton: HTMLButtonElement;
+  deleteButton?: HTMLButtonElement;
+};
+const programs: ProgramEditor[] = [];
+let nextProgramId = 2;
+let nextProgramName = 2;
+let runningProgramId: string | undefined;
+let controller: AbortController | undefined;
 let executionStatus = "READY";
 function setStatus(value: string): void {
   executionStatus = value;
@@ -52,9 +65,187 @@ const harvestLabels = Object.fromEntries(
     name,
   ) => [name, document.querySelector<HTMLElement>(`#harvest-${name}`)!]),
 );
-let running = false;
-let controller: AbortController | undefined;
 const outputLines: string[] = [];
+
+function connectProgram(program: ProgramEditor): void {
+  enableIndentation(program.editor);
+  program.nameInput.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+  program.compileButton.addEventListener(
+    "click",
+    () => executeProgram(program),
+  );
+  program.stopButton.addEventListener("click", () => {
+    if (runningProgramId !== program.id) return;
+    controller?.abort();
+    program.stopButton.disabled = true;
+  });
+  program.deleteButton?.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (runningProgramId || !confirm(t("Delete this program?"))) return;
+    const index = programs.indexOf(program);
+    if (index <= 0) return;
+    programs.splice(index, 1);
+    program.root.remove();
+    updateProgramNumbers();
+  });
+}
+
+function updateProgramNumbers(): void {
+  programs.forEach((program, index) => {
+    program.numberLabel.textContent = String(index + 1).padStart(2, "0");
+  });
+}
+
+function createProgramElement(state: SavedProgram): ProgramEditor {
+  const root = document.createElement("details");
+  root.className = "panel editor-panel disclosure-panel";
+  root.open = !state.collapsed;
+  root.setAttribute("data-program-id", state.id);
+
+  const heading = document.createElement("summary");
+  heading.className = "panel-heading program-heading";
+  const numberLabel = document.createElement("span");
+  numberLabel.className = "section-number program-number";
+  const nameInput = document.createElement("input");
+  nameInput.className = "program-name";
+  nameInput.value = state.name;
+  nameInput.setAttribute("aria-label", t("Program name"));
+  nameInput.setAttribute("data-i18n-aria-label", "Program name");
+  const meta = document.createElement("span");
+  meta.className = "panel-meta";
+  meta.textContent = t("EDITOR");
+  meta.setAttribute("data-i18n", "EDITOR");
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "program-delete";
+  deleteButton.type = "button";
+  deleteButton.textContent = t("Delete");
+  deleteButton.setAttribute("data-i18n", "Delete");
+  heading.append(numberLabel, nameInput, meta, deleteButton);
+
+  const editorBody = document.createElement("div");
+  editorBody.className = "editor-body";
+  const editorLabel = document.createElement("label");
+  editorLabel.className = "sr-only";
+  editorLabel.textContent = t("Write your farm code");
+  editorLabel.setAttribute("data-i18n", "Write your farm code");
+  const editor = document.createElement("textarea");
+  editor.id = `code-${state.id}`;
+  editorLabel.setAttribute("for", editor.id);
+  editor.value = state.code;
+  editor.spellcheck = false;
+  editor.autocomplete = "off";
+  editor.setAttribute("autocapitalize", "off");
+  editor.setAttribute("aria-describedby", "compile-note");
+  editor.setAttribute("placeholder", t("Insert code here..."));
+  editor.setAttribute("data-i18n-placeholder", "Insert code here...");
+  editorBody.append(editorLabel, editor);
+
+  const footer = document.createElement("div");
+  footer.className = "editor-footer";
+  const compileButton = document.createElement("button");
+  compileButton.className = "compile-button";
+  compileButton.type = "button";
+  compileButton.setAttribute("aria-describedby", "compile-note");
+  const compileIcon = document.createElement("span");
+  compileIcon.textContent = "▷";
+  compileIcon.setAttribute("aria-hidden", "true");
+  const compileLabel = document.createElement("span");
+  compileLabel.textContent = t("Compile");
+  compileLabel.setAttribute("data-i18n", "Compile");
+  compileButton.append(compileIcon, compileLabel);
+  const stopButton = document.createElement("button");
+  stopButton.className = "compile-button stop-button";
+  stopButton.type = "button";
+  stopButton.disabled = true;
+  stopButton.textContent = t("Stop");
+  stopButton.setAttribute("data-i18n", "Stop");
+  footer.append(compileButton, stopButton);
+  root.append(heading, editorBody, footer);
+
+  return {
+    id: state.id,
+    root,
+    numberLabel,
+    nameInput,
+    editor,
+    compileButton,
+    stopButton,
+    deleteButton,
+  };
+}
+
+function addProgram(state?: SavedProgram): ProgramEditor {
+  let id = state?.id;
+  while (!id || programs.some((program) => program.id === id)) {
+    id = `program-${nextProgramId++}`;
+  }
+  const program = createProgramElement(
+    state ? { ...state, id } : {
+      id,
+      name: `Program ${nextProgramName++}`,
+      code: "",
+      collapsed: false,
+    },
+  );
+  programs.push(program);
+  connectProgram(program);
+  programList.append(program.root);
+  updateProgramNumbers();
+  return program;
+}
+
+function savedPrograms(): SavedProgram[] {
+  return programs.map((program) => ({
+    id: program.id,
+    name: program.nameInput.value,
+    code: program.editor.value,
+    collapsed: !program.root.open,
+  }));
+}
+
+function replacePrograms(states: readonly SavedProgram[]): void {
+  for (const program of programs.slice(1)) program.root.remove();
+  programs.splice(1);
+  const first = programs[0];
+  const state = states[0];
+  first.id = state.id;
+  first.root.setAttribute("data-program-id", state.id);
+  first.nameInput.value = state.name;
+  first.editor.value = state.code;
+  first.root.open = !state.collapsed;
+  for (const additional of states.slice(1)) addProgram(additional);
+  updateProgramNumbers();
+}
+
+function updateExecutionControls(): void {
+  const running = runningProgramId !== undefined;
+  for (const program of programs) {
+    program.compileButton.disabled = running;
+    program.stopButton.disabled = program.id !== runningProgramId;
+    program.editor.readOnly = running;
+    program.nameInput.disabled = running;
+    if (program.deleteButton) program.deleteButton.disabled = running;
+  }
+  addProgramButton.disabled = running;
+  saveButton.disabled = running;
+  loadButton.disabled = running;
+  upgradeButton.disabled = running || getExpansionCost(farm) === undefined;
+}
+
+const firstProgram: ProgramEditor = {
+  id: "program-1",
+  root: document.querySelector<HTMLDetailsElement>("#program-1")!,
+  numberLabel: document.querySelector<HTMLElement>(".program-number")!,
+  nameInput: document.querySelector<HTMLInputElement>("#program-name-1")!,
+  editor: document.querySelector<HTMLTextAreaElement>("#code-editor")!,
+  compileButton: document.querySelector<HTMLButtonElement>("#compile-button")!,
+  stopButton: document.querySelector<HTMLButtonElement>("#stop-button")!,
+};
+programs.push(firstProgram);
+connectProgram(firstProgram);
 
 let tiles: HTMLDivElement[][] = [];
 function rebuildField(): void {
@@ -134,7 +325,8 @@ function render(): void {
   }`;
   shopFieldSize.textContent = `${farm.size} × ${farm.size}`;
   const expansionCost = getExpansionCost(farm);
-  upgradeButton.disabled = running || expansionCost === undefined;
+  upgradeButton.disabled = runningProgramId !== undefined ||
+    expansionCost === undefined;
   upgradeButton.textContent = expansionCost === undefined
     ? t("Maximum field size reached.")
     : `${t("Expand to")} ${farm.size + 1} × ${farm.size + 1} — ${
@@ -168,9 +360,9 @@ function writeLine(message: string): void {
   output.scrollTop = output.scrollHeight;
 }
 
-compileButton.addEventListener("click", async () => {
-  if (running) return;
-  const program = compileProgram(editor.value);
+async function executeProgram(editorProgram: ProgramEditor): Promise<void> {
+  if (runningProgramId) return;
+  const program = compileProgram(editorProgram.editor.value);
   output.textContent = "";
   outputLines.length = 0;
   output.classList.toggle("is-error", !program.ok);
@@ -183,7 +375,7 @@ compileButton.addEventListener("click", async () => {
       if (error.message) writeLine(error.message);
     }
     writeLine(
-      "Use a listed command, or while/if with a boolean or numeric comparison and an indented body. move() takes no arguments; use direction(right) to turn. Quote strings passed to print().",
+      "Use a listed command, or while/for/if with a supported condition and an indented body. move() takes no arguments; use direction(right) to turn. Quote strings passed to print().",
     );
     return;
   }
@@ -194,17 +386,15 @@ compileButton.addEventListener("click", async () => {
     return;
   }
 
-  running = true;
-  controller = new AbortController();
-  compileButton.disabled = true;
-  stopButton.disabled = false;
-  saveButton.disabled = true;
-  loadButton.disabled = true;
-  upgradeButton.disabled = true;
-  editor.readOnly = true;
+  runningProgramId = editorProgram.id;
+  const runController = new AbortController();
+  controller = runController;
+  updateExecutionControls();
   setStatus("RUNNING");
+  const programName = editorProgram.nameInput.value.trim() ||
+    "Untitled program";
   writeLine(
-    `Starting at (${farm.position.x}, ${farm.position.y}). Use Stop to end execution.`,
+    `Starting "${programName}" at (${farm.position.x}, ${farm.position.y}). Use Stop to end execution.`,
   );
 
   try {
@@ -220,7 +410,7 @@ compileButton.addEventListener("click", async () => {
         const argument = "argument" in instruction
           ? instruction.argument +
             ((instruction.command === "buy" || instruction.command === "sell")
-              ? `, ${instruction.quantity}`
+              ? `, ${instruction.quantitySource}`
               : "")
           : "";
         writeLine(
@@ -228,7 +418,7 @@ compileButton.addEventListener("click", async () => {
         );
       },
       undefined,
-      controller.signal,
+      runController.signal,
     );
     setStatus(result === "stopped" ? "STOPPED" : "COMPLETE");
     writeLine(
@@ -243,15 +433,16 @@ compileButton.addEventListener("click", async () => {
       "Execution stopped because of an unexpected error. Try compiling again.",
     );
   } finally {
-    running = false;
-    compileButton.disabled = false;
-    stopButton.disabled = true;
-    saveButton.disabled = false;
-    loadButton.disabled = false;
-    editor.readOnly = false;
+    runningProgramId = undefined;
     controller = undefined;
+    updateExecutionControls();
     render();
   }
+}
+
+addProgramButton.addEventListener("click", () => {
+  if (runningProgramId) return;
+  addProgram();
 });
 
 upgradeButton.addEventListener("click", () => {
@@ -261,7 +452,7 @@ upgradeButton.addEventListener("click", () => {
 });
 
 saveButton.addEventListener("click", () => {
-  const blob = new Blob([serializeGame(farm, editor.value)], {
+  const blob = new Blob([serializeGame(farm, savedPrograms())], {
     type: "application/json",
   });
   const url = URL.createObjectURL(blob);
@@ -281,7 +472,7 @@ loadInput.addEventListener("change", async () => {
   try {
     const loaded = parseSaveFile(await file.text(), performance.now());
     farm = loaded.farm;
-    editor.value = loaded.editorCode;
+    replacePrograms(loaded.programs);
     output.classList.toggle("is-error", false);
     setStatus("READY");
     writeLine(t("Game loaded."));
@@ -297,11 +488,6 @@ loadInput.addEventListener("change", async () => {
   }
 });
 
-stopButton.addEventListener("click", () => {
-  controller?.abort();
-  stopButton.disabled = true;
-});
-
 languageSelector.addEventListener("change", () => {
   language = languageSelector.value === "de" ? "de" : "en";
   translatePage(language);
@@ -311,6 +497,7 @@ languageSelector.addEventListener("change", () => {
   }
   render();
 });
+updateExecutionControls();
 render();
 // Growth is elapsed time, independent of whether a program is running.
 setInterval(render, 100);

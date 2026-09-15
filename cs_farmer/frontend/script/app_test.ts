@@ -9,6 +9,10 @@ Deno.test("Compile preserves position between clicks and resets only on reset()"
     value = "";
     disabled = false;
     readOnly = false;
+    open = true;
+    type = "";
+    spellcheck = true;
+    autocomplete = "";
     scrollTop = 0;
     scrollHeight = 0;
     style = { gridTemplateColumns: "" };
@@ -16,7 +20,12 @@ Deno.test("Compile preserves position between clicks and resets only on reset()"
     className = "";
     classes = new Set<string>();
     children: Element[] = [];
-    listener?: () => Promise<void>;
+    parent?: Element;
+    removed = false;
+    listener?: (event?: {
+      preventDefault: () => void;
+      stopPropagation: () => void;
+    }) => Promise<void> | void;
     keyListener?: (event: KeyboardEvent) => void;
     selectionStart = 0;
     selectionEnd = 0;
@@ -46,14 +55,37 @@ Deno.test("Compile preserves position between clicks and resets only on reset()"
     }
     replaceChildren(...children: Element[]) {
       this.children = children;
+      for (const child of children) child.parent = this;
+    }
+    append(...children: Element[]) {
+      this.children.push(...children);
+      for (const child of children) child.parent = this;
+    }
+    remove() {
+      this.removed = true;
+      if (this.parent) {
+        this.parent.children = this.parent.children.filter((child) =>
+          child !== this
+        );
+      }
     }
     addEventListener(
       event: string,
-      listener: (() => Promise<void>) | ((event: KeyboardEvent) => void),
+      listener:
+        | ((event?: {
+          preventDefault: () => void;
+          stopPropagation: () => void;
+        }) => Promise<void> | void)
+        | ((event: KeyboardEvent) => void),
     ) {
       if (event === "keydown") {
         this.keyListener = listener as (event: KeyboardEvent) => void;
-      } else this.listener = listener as () => Promise<void>;
+      } else {
+        this.listener = listener as (event?: {
+          preventDefault: () => void;
+          stopPropagation: () => void;
+        }) => Promise<void> | void;
+      }
     }
   }
   const elements = new Map<string, Element>();
@@ -105,6 +137,7 @@ Deno.test("Compile preserves position between clicks and resets only on reset()"
         callback();
       });
     },
+    confirm: () => true,
   });
   element("#load-input").files = [{
     text: () =>
@@ -150,7 +183,7 @@ Deno.test("Compile preserves position between clicks and resets only on reset()"
   strictEqual(element("#position").textContent, "Position: (1, 0)");
   await compile("move()");
   strictEqual(element("#position").textContent, "Position: (2, 0)");
-  match(element("#output").textContent, /Starting at \(1, 0\)/);
+  match(element("#output").textContent, /Starting "Program 1" at \(1, 0\)/);
   await compile("reset()\nwrong()");
   strictEqual(element("#position").textContent, "Position: (2, 0)");
   match(element("#output").textContent, /Line 2: wrong\(\)/);
@@ -351,4 +384,76 @@ Deno.test("Compile preserves position between clicks and resets only on reset()"
   strictEqual(element("#field-size").textContent, "2 × 2");
   strictEqual(element("#shop-field-size").textContent, "2 × 2");
   strictEqual(element("#balance").textContent, "0.00");
+
+  await Promise.resolve(element("#add-program-button").listener!());
+  const programList = element("#program-list");
+  strictEqual(programList.children.length, 1);
+  const secondProgram = programList.children[0];
+  const heading = secondProgram.children[0];
+  const secondName = heading.children[1];
+  const deleteButton = heading.children[3];
+  const secondEditor = secondProgram.children[1].children[1];
+  const secondCompile = secondProgram.children[2].children[0];
+  const secondStop = secondProgram.children[2].children[1];
+  strictEqual(secondName.value, "Program 2");
+  secondName.value = "Move once";
+  secondEditor.value = "move()";
+  const secondRun = Promise.resolve(secondCompile.listener!());
+  strictEqual(element("#compile-button").disabled, true);
+  strictEqual(element("#stop-button").disabled, true);
+  strictEqual(secondCompile.disabled, true);
+  strictEqual(secondStop.disabled, false);
+  strictEqual(element("#add-program-button").disabled, true);
+  await secondRun;
+  match(element("#output").textContent, /Starting "Move once"/);
+  strictEqual(element("#compile-button").disabled, false);
+  strictEqual(secondCompile.disabled, false);
+  strictEqual(secondStop.disabled, true);
+  await Promise.resolve(deleteButton.listener!({
+    preventDefault: () => {},
+    stopPropagation: () => {},
+  }));
+  strictEqual(programList.children.length, 0);
+  strictEqual(secondProgram.removed, true);
+
+  element("#load-input").files = [{
+    text: () =>
+      Promise.resolve(JSON.stringify({
+        format: "cs_farmer_save",
+        version: 4,
+        fieldSize: 1,
+        balanceCents: 0,
+        position: { x: 0, y: 0 },
+        direction: "right",
+        seeds: {
+          wheat: "unlimited",
+          tomato: 0,
+          cucumber: 0,
+          watermelon: 0,
+        },
+        harvest: { wheat: 0, tomato: 0, cucumber: 0, watermelon: 0 },
+        plants: [],
+        programs: [{
+          id: "loaded-1",
+          name: "Loaded first",
+          code: 'print("one")',
+          collapsed: true,
+        }, {
+          id: "loaded-2",
+          name: "Loaded second",
+          code: 'print("two")',
+          collapsed: false,
+        }],
+      })),
+  }];
+  await Promise.resolve(element("#load-input").listener!());
+  strictEqual(element("#program-name-1").value, "Loaded first");
+  strictEqual(element("#code-editor").value, 'print("one")');
+  strictEqual(element("#program-1").open, false);
+  strictEqual(programList.children.length, 1);
+  strictEqual(
+    programList.children[0].children[0].children[1].value,
+    "Loaded second",
+  );
+  strictEqual(programList.children[0].open, true);
 });

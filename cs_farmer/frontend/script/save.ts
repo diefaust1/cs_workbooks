@@ -13,8 +13,15 @@ import {
   type WitherState,
 } from "./plants.ts";
 
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 4;
 export const SAVE_FORMAT = "cs_farmer_save";
+
+export type SavedProgram = {
+  id: string;
+  name: string;
+  code: string;
+  collapsed: boolean;
+};
 
 type SavedPlant = {
   x: number;
@@ -37,14 +44,14 @@ type SaveFile = {
   };
   harvest: Inventory;
   plants: SavedPlant[];
-  editorCode: string;
+  programs: SavedProgram[];
 };
 
-export type LoadedGame = { farm: Farm; editorCode: string };
+export type LoadedGame = { farm: Farm; programs: SavedProgram[] };
 
 export function createSaveFile(
   farm: Farm,
-  editorCode: string,
+  programs: readonly SavedProgram[],
   now = performance.now(),
   random: () => number = Math.random,
 ): SaveFile {
@@ -77,12 +84,15 @@ export function createSaveFile(
     },
     harvest: { ...farm.harvest },
     plants,
-    editorCode,
+    programs: programs.map((program) => ({ ...program })),
   };
 }
 
-export function serializeGame(farm: Farm, editorCode: string): string {
-  return JSON.stringify(createSaveFile(farm, editorCode), null, 2);
+export function serializeGame(
+  farm: Farm,
+  programs: readonly SavedProgram[],
+): string {
+  return JSON.stringify(createSaveFile(farm, programs), null, 2);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -126,6 +136,57 @@ function requireInventory(
   ) as Inventory;
 }
 
+function requirePrograms(
+  save: Record<string, unknown>,
+  version: number,
+): SavedProgram[] {
+  if (version <= 3) {
+    if (typeof save.editorCode !== "string") {
+      throw new Error("editorCode must be a string.");
+    }
+    return [{
+      id: "program-1",
+      name: "Program 1",
+      code: save.editorCode,
+      collapsed: false,
+    }];
+  }
+  if (!Array.isArray(save.programs) || save.programs.length === 0) {
+    throw new Error("programs must be a non-empty array.");
+  }
+  const ids = new Set<string>();
+  return save.programs.map((value, index) => {
+    const program = requireRecord(value, `programs[${index}]`);
+    if (
+      typeof program.id !== "string" ||
+      !/^[A-Za-z0-9_-]+$/.test(program.id)
+    ) {
+      throw new Error(
+        `programs[${index}].id must use only letters, numbers, underscores, or hyphens.`,
+      );
+    }
+    if (ids.has(program.id)) {
+      throw new Error(`programs[${index}].id must be unique.`);
+    }
+    ids.add(program.id);
+    if (typeof program.name !== "string") {
+      throw new Error(`programs[${index}].name must be a string.`);
+    }
+    if (typeof program.code !== "string") {
+      throw new Error(`programs[${index}].code must be a string.`);
+    }
+    if (typeof program.collapsed !== "boolean") {
+      throw new Error(`programs[${index}].collapsed must be a boolean.`);
+    }
+    return {
+      id: program.id,
+      name: program.name,
+      code: program.code,
+      collapsed: program.collapsed,
+    };
+  });
+}
+
 export function parseSaveFile(text: string, now: number): LoadedGame {
   let value: unknown;
   try {
@@ -138,7 +199,8 @@ export function parseSaveFile(text: string, now: number): LoadedGame {
     throw new Error("This is not a Robot Farmer save file.");
   }
   if (
-    save.version !== 1 && save.version !== 2 && save.version !== SAVE_VERSION
+    save.version !== 1 && save.version !== 2 && save.version !== 3 &&
+    save.version !== SAVE_VERSION
   ) {
     throw new Error(`Unsupported save version: ${String(save.version)}.`);
   }
@@ -164,17 +226,15 @@ export function parseSaveFile(text: string, now: number): LoadedGame {
   }
   const tomatoSeeds = requireInteger(seeds.tomato, "seeds.tomato");
   const cucumberSeeds = requireInteger(seeds.cucumber, "seeds.cucumber");
-  const legacy = save.version !== SAVE_VERSION;
-  const watermelonSeeds = legacy
+  const legacyPlants = save.version === 1 || save.version === 2;
+  const watermelonSeeds = legacyPlants
     ? 0
     : requireInteger(seeds.watermelon, "seeds.watermelon");
-  const harvest = requireInventory(save.harvest, "harvest", legacy);
+  const harvest = requireInventory(save.harvest, "harvest", legacyPlants);
   if (
     !Array.isArray(save.plants) || save.plants.length > fieldSize * fieldSize
   ) throw new Error("plants must be a valid array.");
-  if (typeof save.editorCode !== "string") {
-    throw new Error("editorCode must be a string.");
-  }
+  const programs = requirePrograms(save, save.version as number);
 
   const farm = createFarm(fieldSize);
   farm.balance = balanceCents / 100;
@@ -204,7 +264,7 @@ export function parseSaveFile(text: string, now: number): LoadedGame {
       throw new Error(`plants[${index}].type is invalid.`);
     }
     let witherState: WitherState = "pending";
-    if (!legacy) {
+    if (!legacyPlants) {
       if (
         !(["pending", "healthy", "withered"] as unknown[]).includes(
           entry.witherState,
@@ -224,5 +284,5 @@ export function parseSaveFile(text: string, now: number): LoadedGame {
       witherState,
     );
   }
-  return { farm, editorCode: save.editorCode };
+  return { farm, programs };
 }
