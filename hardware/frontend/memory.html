@@ -67,22 +67,30 @@
         <p id="hiddenClueMemory" hidden>
 		    Tipp: Ein Speichertyp ist ein flüchtiger Speicher, ein anderer sind zwei Festspeicher und der dritte steht mit der GPU in Verbindung. Die Reihenfolge der Speichertypen spielt keine Rolle.
 		</p>
-		
-        <p class="p2Header">
-			Kreuzworträtsel
-		</p>
-		<div class="imageContainer">
-			<img src="media/riddle2_ready.svg" alt="Crossword2" width="100%" height="100%">
-		</div>
-        <p>
-			Mit dem Aufdecken-Button könnt ihr euch die Lösung des Kreuzworträtsels anschauen.
-		</p>
-		<button id="crosswordButton2" type="button">Aufdecken</button>
-		<div class="center">
-			<p id="hiddenCrossword2" hidden>
-			<img src="media/riddle2_solved.svg" alt="solvedCrossword2" width="60%" height="60%">
-			</p>
-		</div>
+
+		<section class="interactive-crossword" aria-labelledby="interactive-crossword-title">
+			<h3 id="interactive-crossword-title">Interaktives Kreuzworträtsel</h3>
+			<p id="interactive-crossword-instructions">Tragt die Buchstaben direkt in die Felder ein. Mit den Pfeiltasten könnt ihr euch im Rätsel bewegen.</p>
+			<div class="crossword-grid-wrapper">
+				<div id="interactive-crossword-grid" class="crossword-grid" role="group" aria-label="Interaktives Speicher-Kreuzworträtsel" aria-describedby="interactive-crossword-instructions"></div>
+			</div>
+			<ol class="crossword-clues">
+				<li>Technik, um mehr RAM zu nutzen, als eigentlich verfügbar ist</li>
+				<li>Festspeicher, der Daten mithilfe elektronischer Schaltungen liest</li>
+				<li>Zwei separate RAM-Module arbeiten in Paaren</li>
+				<li>Gedächtnis des Computers</li>
+				<li>Festspeicher für lange Datenspeicherung</li>
+				<li>Einheit von Speicherplatz: Mega …?</li>
+				<li>Nichtflüchtiger Festwertspeicher, dessen Daten dauerhaft auf einem Chip gespeichert sind</li>
+				<li>Festspeicher mit rotierenden Platten und magnetischen Schreib-/Leseköpfen</li>
+				<li>Firmware-Programm für den Startvorgang eines Computers</li>
+			</ol>
+			<div class="crossword-actions">
+				<button id="check-interactive-crossword" type="button">Überprüfen</button>
+				<button id="reset-interactive-crossword" class="secondary-button" type="button">Zurücksetzen</button>
+			</div>
+			<p id="interactive-crossword-status" class="crossword-status" role="status" aria-live="polite"></p>
+		</section>
         <p class="p1Header">Was ist Datenspeicherung?</p>
         <p>
             Die Datenspeicherung bezieht sich auf magnetische, optische oder mechanische Medien, die digitale Informationen für laufende oder zukünftige Operationen aufzeichnen und aufbewahren. Es gibt zwei Arten von digitalen Informationen: Eingabe- und Ausgabedaten. 
