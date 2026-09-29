@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="css/style.css" />
 	<link rel="icon" href="media/28px_Faust.png" type="image/x-icon" />
 	<script type="module" src="scripts/navigation.js"></script>
+	<script type="module" src="scripts/wrupScript.js"></script>
   </head>
  
   <body>
@@ -40,7 +41,7 @@
 		<b>Aufgabe 2:</b><br>
 		<p>
 			Stellt euch vor, ihr braucht einen neuen Computer. Setzt euch ein Budget und sucht in den folgenden Quellen oder selbstständig im Internet nach Computerteilen. Eure Aufgabe ist es, einen Computer selbst zusammenzustellen, mit allen Teilen, die ihr dafür benötigt. 
-			Tragt in die einzelnen Felder ein, welche Teile ihr euch ausgesucht habt, und <b>gebt</b> in 1-2 Stichpunkten <b>an</b>, warum diese für euren Anwendungsfall geeignet sind. Schreibt auch den Preis der einzelnen Teile sowie den Gesamtpreis auf.  
+			Tragt in die einzelnen Felder ein, welche Teile ihr euch ausgesucht habt, und <b>gebt</b> in 1-2 Stichpunkten <b>an</b>, warum diese für euren Anwendungsfall geeignet sind. Schreibt auch den Preis der einzelnen Teile sowie den Gesamtpreis auf.
 		</p>
 		<ul>
 			<li>
@@ -58,42 +59,41 @@
 			<li>
 				<a href="https://www.amd.com/en.html">AMD</a>
 			</li>
-			<li>
-				<a href="https://www.alternate.de/">Alternate</a>
-			</li>
 		</ul>
+		<form id="computer-build-form">
 		<div>
-			<label for="textareaOne">Mainboard:</label>
-			<textarea id="textareaOne" name="message" placeholder="Type your message here..."></textarea>
+			<label for="mainboard-answer">Mainboard:</label>
+			<textarea id="mainboard-answer" name="mainboard" data-pdf-label="Mainboard" placeholder="Auswahl, Begründung und Preis"></textarea>
 		</div>
 		<div>
-			<label for="textareaTwo">CPU:</label>
-			<textarea id="textareaTwo" name="message" placeholder="Type your message here..."></textarea>
+			<label for="cpu-answer">CPU:</label>
+			<textarea id="cpu-answer" name="cpu" data-pdf-label="CPU" placeholder="Auswahl, Begründung und Preis"></textarea>
 		</div>
 		<div>
-			<label for="textareaThree">GPU:</label>
-			<textarea id="textareaThree" name="message" placeholder="Type your message here..."></textarea>
+			<label for="gpu-answer">GPU:</label>
+			<textarea id="gpu-answer" name="gpu" data-pdf-label="GPU" placeholder="Auswahl, Begründung und Preis"></textarea>
 		</div>
 		<div>
-			<label for="textareaFour">RAM und Festwertspeicher:</label>
-			<textarea id="textareaFour" name="message" placeholder="Type your message here..."></textarea>
+			<label for="memory-answer">RAM und Festwertspeicher:</label>
+			<textarea id="memory-answer" name="memory" data-pdf-label="RAM und Festwertspeicher" placeholder="Auswahl, Begründung und Preis"></textarea>
 		</div>
 		<div>
-			<label for="textareaFive">Netzteil:</label>
-			<textarea id="textareaFive" name="message" placeholder="Type your message here..."></textarea>
+			<label for="power-supply-answer">Netzteil:</label>
+			<textarea id="power-supply-answer" name="power-supply" data-pdf-label="Netzteil" placeholder="Auswahl, Begründung und Preis"></textarea>
 		</div>
 		<div>
-			<label for="textareaSix">Gehäuse (optional):</label>
-			<textarea id="textareaSix" name="message" placeholder="Type your message here..."></textarea>
+			<label for="case-answer">Gehäuse (optional):</label>
+			<textarea id="case-answer" name="case" data-pdf-label="Gehäuse (optional)" placeholder="Auswahl, Begründung und Preis"></textarea>
 		</div>
 		<div>
-			<label for="textareaSeven">Gesamtpreis:</label>
-			<textarea id="textareaSeven" name="message" placeholder="Type your message here..."></textarea>
+			<label for="total-price-answer">Gesamtpreis:</label>
+			<textarea id="total-price-answer" name="total-price" data-pdf-label="Gesamtpreis" placeholder="Gesamtpreis des Computers"></textarea>
 		</div>
 		<div class="buttonContainer">
-			<button id="PSButton" type="button">Drucken</button>
-			<button id="PSButton" type="button">Submit</button>
+			<button id="download-pdf-button" type="submit">Als PDF herunterladen</button>
 		</div>
+			<p id="download-status" class="download-status" role="status" aria-live="polite"></p>
+		</form>
 	</div>
 	<div class="pageEnd">
 		Wenn ihr diese Seite bearbeitet habt, seid ihr mit dem Arbeitsheft fertig. Vielen Dank, dass ihr alle am Workshop teilgenommen habt :)

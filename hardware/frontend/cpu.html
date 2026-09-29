@@ -35,7 +35,7 @@
 			<b>Aufgabe 1:</b><br>
 			Unter der Aufgabenstellung findet ihr Informationen und Fragen zum Thema CPU. Eure Aufgabe ist es, die Mindmap mit wichtigen Informationen zu <b>erweitern</b>. Fangt mit einer eigenen Recherche zum Thema an und versucht, die Fragen zu beantworten. 
 			Euch ist es freigestellt, auch die Texte und Videos von dieser Webseite zu verwenden. Falls auf dem A3-Blatt nicht genügend Platz ist, könnt ihr auch ein Extrablatt verwenden. Unter den Fragen findet ihr außerdem ein Kreuzworträtsel, 
-			das ihr als Extrablatt erhaltet oder auch als digitale <a href="/media/riddle_ready.pdf" target="_blank">Version</a>.
+			das mit Begriffen gelöst werden kann welche ihr im Laufe des Abschnittes kennenlernt.
 		<p>
 			Diese <b>Leitfragen</b> können euch helfen, nach anfänglichen Informationen zu suchen. Sucht auch gerne nach anderen Informationen, die euch interessieren.
 			<ol>
@@ -56,21 +56,29 @@
 				</li>
 			</ol>
 		</p>
-		<p class="p2Header">
-			Kreuzworträtsel
-		</p>
-		<div class="imageContainer">
-			<img src="media/riddle_ready.svg" alt="Crossword" width="100%" height="100%">
-		</div>
-		<p>
-			Mit dem Aufdecken-Button könnt ihr euch die Lösung des Kreuzworträtsels anschauen.
-		</p>
-		<button id="crosswordButton" type="button">Aufdecken</button>
-		<div class="center">
-			<p id="hiddenCrossword" hidden>
-			<img src="media/riddle_solved.svg" alt="solvedCrossword" width="70%" height="70%">
-			</p>
-		</div>
+		<section class="interactive-crossword" aria-labelledby="interactive-crossword-title">
+			<h3 id="interactive-crossword-title">Interaktives Kreuzworträtsel</h3>
+			<p id="interactive-crossword-instructions">Tragt die Buchstaben direkt in die Felder ein. Mit den Pfeiltasten könnt ihr euch im Rätsel bewegen.</p>
+			<div class="crossword-grid-wrapper">
+				<div id="interactive-crossword-grid" class="crossword-grid" role="group" aria-label="Interaktives CPU-Kreuzworträtsel" aria-describedby="interactive-crossword-instructions"></div>
+			</div>
+			<ol class="crossword-clues">
+				<li>Sind in der CPU und in Früchten zu finden</li>
+				<li>Führt arithmetische Operationen in der CPU aus</li>
+				<li>Einheit der Taktrate</li>
+				<li>Einer der drei Schritte des Core-Prozessor-Zyklus</li>
+				<li>Kleine Speicherorte innerhalb der CPU</li>
+				<li>Abkürzung für Simultaneous Multithreading</li>
+				<li>Schneller Zwischenspeicher in oder nahe der CPU</li>
+				<li>Gibt an, wie viele Taktzyklen eine CPU pro Sekunde ausführt</li>
+				<li>Koordiniert die Abläufe und steuert die Ausführung von Befehlen</li>
+			</ol>
+			<div class="crossword-actions">
+				<button id="check-interactive-crossword" type="button">Überprüfen</button>
+				<button id="reset-interactive-crossword" class="secondary-button" type="button">Zurücksetzen</button>
+			</div>
+			<p id="interactive-crossword-status" class="crossword-status" role="status" aria-live="polite"></p>
+		</section>
 		<p class="p1Header">Was ist die zentrale Recheneinheit (CPU)?</p>
 		<p>
 			Eine zentrale Recheneinheit (CPU) ist die wichtigste Funktionskomponente eines Computers. Die CPU ist eine Ansammlung elektronischer Schaltkreise, 
